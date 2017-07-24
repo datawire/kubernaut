@@ -1,0 +1,8 @@
+# --- Intellij IDEA ---
+.idea
+
+# --- Python ---
+virtualenv
+*.pyc
+
+
