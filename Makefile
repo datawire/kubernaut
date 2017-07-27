@@ -1,4 +1,4 @@
-.PHONY: default bumpversion release
+.PHONY: default release
 
 VERSION=$(shell git describe --tags)
 SHELL:=/bin/bash
@@ -13,7 +13,7 @@ version:
 
 virtualenv:
 	virtualenv --python=python3 virtualenv
-	virtualenv/bin/pip install -r requirements.txt
+	virtualenv/bin/pip install -Ur requirements.txt
 
 ## Development ##
 
