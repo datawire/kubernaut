@@ -15,6 +15,9 @@ DEFAULT_SERVER = "kubernaut.io"
 config_root = Path.home() / ".config" / "kubernaut"
 config_root.mkdir(exist_ok=True)
 
+kubeconfig_root = Path.home() / ".kube"
+kubeconfig_root.mkdir(exist_ok=True)
+
 config_file = config_root / 'config.json'
 
 
@@ -56,7 +59,18 @@ def cli():
 def cli_claim(server):
     url = 'http://{}/cluster'.format(server)
     auth = create_basic_auth(server)
-    resp = requests.delete(url, auth=auth)
+    resp = requests.post(url, auth=auth)
+
+    if resp.status_code == 401:
+        click.echo("Authentication Failed!")
+        exit(1)
+    if resp.status_code == 400:
+        click.echo("Error!")
+    if resp.status_code == 200:
+        with (kubeconfig_root / "kubernaut-{}".format(auth.username)).open("a+") as f:
+            f.write(resp.text)
+            click.echo(
+                "Wrote kubernetes config to {}".format((kubeconfig_root / "kubernaut-{}".format(auth.username))))
 
 
 @cli.command("kubeconfig", help="retrieve clusters kubeconfig")
@@ -71,6 +85,17 @@ def cli_get_kubeconfig(server, output):
     auth = create_basic_auth(server)
     resp = requests.get(url, auth=auth)
 
+    if resp.status_code == 401:
+        click.echo("Authentication Failed!")
+        exit(1)
+    if resp.status_code == 404:
+        click.echo("Kubernetes cluster not found... have you claimed one? Please run `kubernaut claim`")
+    if resp.status_code == 200:
+        with (kubeconfig_root / "kubernaut-{}".format(auth.username)).open("a+") as f:
+            f.write(resp.text)
+            click.echo(
+                "Wrote kubernetes config to {}".format((kubeconfig_root / "kubernaut-{}".format(auth.username))))
+
 
 @cli.command("release", help="release your Kubernetes cluster")
 @common_options
@@ -78,6 +103,10 @@ def cli_release(server):
     url = 'http://{}/cluster'.format(server)
     auth = create_basic_auth(server)
     resp = requests.delete(url, auth=auth)
+
+    if resp.status_code == 401:
+        click.echo("Authentication Failed!")
+        exit(1)
 
 
 @cli.command("login", help="login to access the kubernaut.io service")
@@ -97,9 +126,11 @@ def cli_login(server, username, password):
     save_config(config)
 
 
-@cli.command("register", help="register with the kubernaut.io service")
-def cli_register():
-    pass
+# TODO: Implement
+#
+# @cli.command("register", help="register with the kubernaut.io service")
+# def cli_register():
+#     pass
 
 
 def save_config(data):
