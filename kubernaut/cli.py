@@ -75,12 +75,12 @@ def cli_claim(server):
 
 @cli.command("kubeconfig", help="retrieve clusters kubeconfig")
 @click.option(
-    '-o', '--output',
-    help='Output path of the kubeconfig file',
-    default=Path.home() / '.kube' / 'config',
+    '-p', '--path-only',
+    help='Only print the path after the command exits',
+    is_flag=True
 )
 @common_options
-def cli_get_kubeconfig(server, output):
+def cli_get_kubeconfig(server, path_only):
     url = 'http://{}/cluster'.format(server)
     auth = create_basic_auth(server)
     resp = requests.get(url, auth=auth)
@@ -91,10 +91,14 @@ def cli_get_kubeconfig(server, output):
     if resp.status_code == 404:
         click.echo("Kubernetes cluster not found... have you claimed one? Please run `kubernaut claim`")
     if resp.status_code == 200:
-        with (kubeconfig_root / "kubernaut-{}".format(auth.username)).open("a+") as f:
+        path = kubeconfig_root / "kubernaut-{}".format(auth.username)
+        with path.open("a+") as f:
             f.write(resp.text)
-            click.echo(
-                "Wrote kubernetes config to {}".format((kubeconfig_root / "kubernaut-{}".format(auth.username))))
+            if path_only:
+                click.echo(path)
+            else:
+                click.echo(
+                    "Wrote kubernetes config to {}".format((kubeconfig_root / "kubernaut-{}".format(auth.username))))
 
 
 @cli.command("release", help="release your Kubernetes cluster")
