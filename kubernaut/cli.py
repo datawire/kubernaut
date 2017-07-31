@@ -58,7 +58,7 @@ def cli():
 @common_options
 def cli_claim(server):
     url = 'http://{}/cluster'.format(rewrite_server_addr(server))
-    auth = create_basic_auth(rewrite_server_addr(server))
+    auth = create_basic_auth(server)
     resp = requests.post(url, auth=auth)
 
     if resp.status_code == 401:
