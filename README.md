@@ -16,9 +16,9 @@ $ pip install git+https://github.com/datawire/kubernaut.git
 
 # Quick Start
 
-1. Login to the service `kubectl login` (ask Phil for the development password)
+1. Login to the service `kubernaut login` (ask Phil for the development password)
 
-2. Claim a new Kubernetes cluster with `kubernetes claim`. Claimed clusters are ephemeral and terminated automatically after 60 minutes.
+2. Claim a new Kubernetes cluster with `kubernaut claim`. Claimed clusters are ephemeral and terminated automatically after 60 minutes.
 
 3. Start using your cluster!
 
