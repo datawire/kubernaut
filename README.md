@@ -8,6 +8,8 @@ Install the `kubernaut` tool to register and use the service.
 
 ## Pre-Release Install Instructions
 
+Requires Python 3!
+
 ```bash
 $ pip install git+https://github.com/datawire/kubernaut.git
 ```

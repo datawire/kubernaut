@@ -65,9 +65,11 @@ def cli_claim(server):
         click.echo("Authentication Failed!")
         exit(1)
     if resp.status_code == 400:
-        click.echo("Error!")
+        click.echo(resp.json()["description"])
+    if resp.status_code == 500:
+        click.echo("Fatal Error!")
     if resp.status_code == 200:
-        with (kubeconfig_root / "kubernaut-{}".format(auth.username)).open("a+") as f:
+        with (kubeconfig_root / "kubernaut-{}".format(auth.username)).open("w+") as f:
             f.write(resp.text)
             click.echo(
                 "Wrote kubernetes config to {}".format((kubeconfig_root / "kubernaut-{}".format(auth.username))))
@@ -88,11 +90,15 @@ def cli_get_kubeconfig(server, path_only):
     if resp.status_code == 401:
         click.echo("Authentication Failed!")
         exit(1)
+    if resp.status_code == 400:
+        click.echo(resp.json()["description"])
     if resp.status_code == 404:
         click.echo("Kubernetes cluster not found... have you claimed one? Please run `kubernaut claim`")
+    if resp.status_code == 500:
+        click.echo("Fatal Error!")
     if resp.status_code == 200:
         path = kubeconfig_root / "kubernaut-{}".format(auth.username)
-        with path.open("a+") as f:
+        with path.open("w+") as f:
             f.write(resp.text)
             if path_only:
                 click.echo(path)
