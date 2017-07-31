@@ -57,8 +57,8 @@ def cli():
 @cli.command("claim", help="claim your Kubernetes cluster")
 @common_options
 def cli_claim(server):
-    url = 'http://{}/cluster'.format(server)
-    auth = create_basic_auth(server)
+    url = 'http://{}/cluster'.format(rewrite_server_addr(server))
+    auth = create_basic_auth(rewrite_server_addr(server))
     resp = requests.post(url, auth=auth)
 
     if resp.status_code == 401:
@@ -83,7 +83,7 @@ def cli_claim(server):
 )
 @common_options
 def cli_get_kubeconfig(server, path_only):
-    url = 'http://{}/cluster'.format(server)
+    url = 'http://{}/cluster'.format(rewrite_server_addr(server))
     auth = create_basic_auth(server)
     resp = requests.get(url, auth=auth)
 
@@ -110,7 +110,7 @@ def cli_get_kubeconfig(server, path_only):
 @cli.command("release", help="release your Kubernetes cluster")
 @common_options
 def cli_release(server):
-    url = 'http://{}/cluster'.format(server)
+    url = 'http://{}/cluster'.format(rewrite_server_addr(server))
     auth = create_basic_auth(server)
     resp = requests.delete(url, auth=auth)
 
@@ -135,6 +135,12 @@ def cli_login(server, username, password):
 
     save_config(config)
 
+
+def rewrite_server_addr(addr):
+    if addr == "kubernaut.io":
+        return addr + ":30080"
+    else:
+        return addr
 
 # TODO: Implement
 #
