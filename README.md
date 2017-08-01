@@ -11,6 +11,10 @@ Install the `kubernaut` tool to register and use the service.
 Requires Python 3!
 
 ```bash
+# only need these two commands during development
+$ virtualenv venv --python python3
+$ source venv/bin/activate
+
 $ pip install git+https://github.com/datawire/kubernaut.git
 ```
 
