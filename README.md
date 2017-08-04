@@ -1,6 +1,10 @@
 # Kubernaut
 
-Kubernetes clusters on-demand for painless development and testing.
+Kubernaut provides on-demand, ephemeral Kubernetes clusters for development and testing.
+
+Google Container Engine (and its brethren) are great if you need to spin up a cluster for a long-running job (e.g., your cloud service). But what if you want your CI system to run tests on a clean Kubernetes install? Or what if you want to reproduce a specific bug on a specific version of Kubernetes?
+
+In these situations, you not only want an on-demand cluster -- you want it to go away when you're done.
 
 # Getting Started
 
