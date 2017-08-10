@@ -1,8 +1,11 @@
+import versioneer
+
 from setuptools import setup, find_packages
 
 setup(
     name='kubernaut',
-    version='0.1.0',
+    version=versioneer.get_version(),
+    cmdclass=versioneer.get_cmdclass(),
     packages=find_packages(),
     include_package_data=True,
     install_requires=[

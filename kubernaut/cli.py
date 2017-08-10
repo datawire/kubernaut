@@ -1,46 +1,105 @@
 #!/usr/bin/env python
-import click
 
 import click
 import json
 import functools
+import platform
 import requests
+from .scout_client import Scout
+from . import __version__
+
 
 from pathlib import Path
-from requests.auth import HTTPBasicAuth
+from os import getenv
 from sys import exit
 
-DEFAULT_SERVER = "kubernaut.io"
+# ----------------------------------------------------------------------------------------------------------------------
+# Constants
+# ----------------------------------------------------------------------------------------------------------------------
 
-config_root = Path.home() / ".config" / "kubernaut"
+PROGRAM_NAME = "kubernaut"
+
+KUBERNAUT_HTTPS = getenv("KUBERNAUT_HTTPS", "1").lower() in {"1", "true", "yes"}
+KUBERNAUT_HOST = getenv("KUBERNAUT_HOST", "kubernaut.io")
+KUBERNAUT_ADDR = ("https://{0}" if KUBERNAUT_HTTPS else "http://{0}").format(KUBERNAUT_HOST)
+
+# Formatting Notes
+# ----------------
+#
+# %(prog)s is interpreted by the click library.
+# {0}      is interpreted by kubernaut itself to inject version information.
+#
+VERSION_OUTDATED_MSG = "Your version of %(prog)s is out of date! The latest version is {0}." + \
+                       " Please go to " + click.style("https://github.com/datawire/kubernaut", underline=True) + \
+                       " for update instructions."
+
+LOGIN_MSG = click.style("Kubernaut is a free service! Please login to use Kubernaut => ") + \
+            click.style("https://kubernaut.io/login", bold=True, underline=True) + \
+            "\n"
+
+USER_AGENT = "{}/{0} ({1}; {2})".format(PROGRAM_NAME, __version__, platform.system(), platform.release())
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Configuration
+# ----------------------------------------------------------------------------------------------------------------------
+
+config_root = Path.home() / ".config" / PROGRAM_NAME
 config_root.mkdir(exist_ok=True)
+config_file = config_root / 'config.json'
+
+with config_file.open('a+') as f:
+    f.seek(0)
+    data = f.read() or '{}'
+    config = json.loads(data)
 
 kubeconfig_root = Path.home() / ".kube"
 kubeconfig_root.mkdir(exist_ok=True)
 
-config_file = config_root / 'config.json'
+scout = Scout(PROGRAM_NAME, __version__)
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Utility Functions
+# ----------------------------------------------------------------------------------------------------------------------
 
 
-def load_config():
-    with config_file.open('a+') as f:
-        f.seek(0)
-        data = f.read() or '{}'
-        return json.loads(data)
-
-config = load_config()
+def save_config(config_data):
+    with config_file.open('w+') as f:
+        json.dump(config_data, f, indent=2)
 
 
-def create_basic_auth(server):
+def get_jwt(server):
     credentials = config.get('credentials', {})
     if server not in credentials:
         click.echo("Credentials not found for {}. Please login first with `kubernaut login`.".format(server))
         exit(1)
 
-    return HTTPBasicAuth(credentials[server]['username'], credentials[server]['password'])
+    return credentials[server]['token']
+
+
+def create_headers(server):
+    return {
+        "Authorization": "Bearer {0}".format(get_jwt(server)),
+        "User-Agent": USER_AGENT
+    }
+
+
+def handle_response(resp):
+    failed = False
+    if resp.status_code == 400:
+        click.echo(resp.json()["description"])
+    elif resp.status_code == 401:
+        click.echo("Unable to authenticate with Kubernaut. Do you have an account?\n\n" + LOGIN_MSG)
+    elif resp.status_code == 404:
+        click.echo("Kubernetes cluster not found... have you claimed one? Please run `kubernaut claim`")
+    elif resp.status_code == 500:
+        click.echo("The kubernaut.io service is experiencing a temporary issue. Please try again later.")
+
+    if failed:
+        exit(1)
 
 
 def common_options(func):
-    @click.option("-s", "--server", help="Set the kubernaut server", default=DEFAULT_SERVER)
+    @click.option("-s", "--server", help="Set the kubernaut server", default=KUBERNAUT_ADDR)
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         return func(*args, **kwargs)
@@ -48,8 +107,24 @@ def common_options(func):
     return wrapper
 
 
+def create_version_message():
+    msg = "%(prog)s v%(version)s"
+
+    resp = scout.send({})
+
+    latest_version = resp.get('latest_version', __version__)
+    if latest_version != __version__:
+        msg += "\n\n" + VERSION_OUTDATED_MSG.format(latest_version)
+
+    return msg
+
+# ----------------------------------------------------------------------------------------------------------------------
+# CLI implementation
+# ----------------------------------------------------------------------------------------------------------------------
+
+
 @click.group()
-@click.version_option(version="0.1.0")
+@click.version_option(version=__version__, prog_name=PROGRAM_NAME, message=create_version_message())
 def cli():
     """kubernaut: easy kubernetes clusters for painless development and testing"""
 
@@ -57,22 +132,15 @@ def cli():
 @cli.command("claim", help="claim your Kubernetes cluster")
 @common_options
 def cli_claim(server):
-    url = 'http://{}/cluster'.format(rewrite_server_addr(server))
-    auth = create_basic_auth(server)
-    resp = requests.post(url, auth=auth)
+    url = '{}/cluster'.format(server)
+    resp = requests.post(url, headers=create_headers(server))
 
-    if resp.status_code == 401:
-        click.echo("Authentication Failed!")
-        exit(1)
-    if resp.status_code == 400:
-        click.echo(resp.json()["description"])
-    if resp.status_code == 500:
-        click.echo("Fatal Error!")
+    handle_response(resp)
     if resp.status_code == 200:
-        with (kubeconfig_root / "kubernaut-{}".format(auth.username)).open("w+") as f:
+        with (kubeconfig_root / PROGRAM_NAME).open("w+") as f:
             f.write(resp.text)
             click.echo(
-                "Wrote kubernetes config to {}".format((kubeconfig_root / "kubernaut-{}".format(auth.username))))
+                "Wrote kubernetes config to {}".format((kubeconfig_root / "kubernaut")))
 
 
 @cli.command("kubeconfig", help="retrieve clusters kubeconfig")
@@ -83,72 +151,27 @@ def cli_claim(server):
 )
 @common_options
 def cli_get_kubeconfig(server, path_only):
-    url = 'http://{}/cluster'.format(rewrite_server_addr(server))
-    auth = create_basic_auth(server)
-    resp = requests.get(url, auth=auth)
+    url = '{}/cluster'.format(server)
+    resp = requests.get(url, headers=create_headers(server))
 
-    if resp.status_code == 401:
-        click.echo("Authentication Failed!")
-        exit(1)
-    if resp.status_code == 400:
-        click.echo(resp.json()["description"])
-    if resp.status_code == 404:
-        click.echo("Kubernetes cluster not found... have you claimed one? Please run `kubernaut claim`")
-    if resp.status_code == 500:
-        click.echo("Fatal Error!")
+    handle_response(resp)
     if resp.status_code == 200:
-        path = kubeconfig_root / "kubernaut-{}".format(auth.username)
-        with path.open("w+") as f:
-            f.write(resp.text)
+        path = kubeconfig_root / PROGRAM_NAME
+        with path.open("w+") as kf:
+            kf.write(resp.text)
             if path_only:
                 click.echo(path)
             else:
-                click.echo(
-                    "Wrote kubernetes config to {}".format((kubeconfig_root / "kubernaut-{}".format(auth.username))))
+                click.echo("Wrote kubernetes config to {}".format((kubeconfig_root / PROGRAM_NAME)))
 
 
-@cli.command("release", help="release your Kubernetes cluster")
-@common_options
-def cli_release(server):
-    url = 'http://{}/cluster'.format(rewrite_server_addr(server))
-    auth = create_basic_auth(server)
-    resp = requests.delete(url, auth=auth)
-
-    if resp.status_code == 401:
-        click.echo("Authentication Failed!")
-        exit(1)
+@cli.command("discard", help="Discard a previously claimed Kubernaut instance")
+def cli_discard(server):
+    url = 'http://{}/cluster'.format(server)
+    resp = requests.delete(url, headers=create_headers(server))
+    handle_response(resp)
 
 
-@cli.command("login", help="login to access the kubernaut.io service")
-@common_options
-@click.option("-u", "--username", prompt=True)
-@click.option("-p", "--password", prompt=True, hide_input=True)
-def cli_login(server, username, password):
-    if 'credentials' not in config:
-        config['credentials'] = {}
-
-    credentials = config['credentials']
-    credentials[server] = {'username': username, 'password': password}
-
-    config['credentials'] = credentials
-    print(config)
-
-    save_config(config)
-
-
-def rewrite_server_addr(addr):
-    if addr == "kubernaut.io":
-        return addr + ":30080"
-    else:
-        return addr
-
-# TODO: Implement
-#
-# @cli.command("register", help="register with the kubernaut.io service")
-# def cli_register():
-#     pass
-
-
-def save_config(data):
-    with config_file.open('w+') as f:
-        json.dump(data, f, indent=2)
+@cli.command("login", help="Login to use the kubernaut.io service")
+def cli_login():
+    click.echo(LOGIN_MSG)
