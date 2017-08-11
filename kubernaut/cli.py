@@ -37,7 +37,7 @@ LOGIN_MSG = click.style("Kubernaut is a free service! Please login to use Kubern
             click.style("https://kubernaut.io/login", bold=True, underline=True) + \
             "\n"
 
-USER_AGENT = "{}/{0} ({1}; {2})".format(PROGRAM_NAME, __version__, platform.system(), platform.release())
+USER_AGENT = "{0}/{1} ({2}; {3})".format(PROGRAM_NAME, __version__, platform.system(), platform.release())
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Configuration
@@ -69,11 +69,12 @@ def save_config(config_data):
 
 def get_jwt(server):
     credentials = config.get('credentials', {})
-    if server not in credentials:
+    s = server.split("://")[1]
+    if s not in credentials:
         click.echo("Credentials not found for {}. Please login first with `kubernaut login`.".format(server))
         exit(1)
 
-    return credentials[server]['token']
+    return credentials[s]['token']
 
 
 def create_headers(server):
@@ -132,7 +133,7 @@ def cli():
 @cli.command("claim", help="claim your Kubernetes cluster")
 @common_options
 def cli_claim(server):
-    url = '{}/cluster'.format(server)
+    url = '{}/cluster/'.format(server)
     resp = requests.post(url, headers=create_headers(server))
 
     handle_response(resp)
@@ -166,8 +167,9 @@ def cli_get_kubeconfig(server, path_only):
 
 
 @cli.command("discard", help="Discard a previously claimed Kubernaut instance")
+@common_options
 def cli_discard(server):
-    url = 'http://{}/cluster'.format(server)
+    url = '{}/cluster'.format(server)
     resp = requests.delete(url, headers=create_headers(server))
     handle_response(resp)
 
