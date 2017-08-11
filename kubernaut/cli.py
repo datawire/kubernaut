@@ -133,7 +133,7 @@ def cli():
 @cli.command("claim", help="claim your Kubernetes cluster")
 @common_options
 def cli_claim(server):
-    url = '{}/cluster/'.format(server)
+    url = '{}/cluster'.format(server)
     resp = requests.post(url, headers=create_headers(server))
 
     handle_response(resp)
