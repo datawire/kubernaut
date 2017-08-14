@@ -45,7 +45,7 @@ sudo apt install --no-install-recommends kubernaut
     To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
     ```
 
-5. When you are all done use `kubernaut discard` to release the cluster or if you're lazy forget about it and the cluster will be automatically terminated after 60 minutes.
+5. When you are all done use `kubernaut discard` to release the cluster or if you are lazy and forget about it then the cluster will be automatically terminated after 60 minutes.
 
 # Command Reference
 
