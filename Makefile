@@ -4,7 +4,7 @@ VERSION=$(shell git describe --tags)
 SHELL:=/bin/bash
 
 default:
-	@echo "See http://kubernaut.io/additional-information/developing.html"
+	@echo "See https://github.com/datawire/kubernaut/README.md"
 
 version:
 	@echo $(VERSION)
@@ -21,6 +21,6 @@ virtualenv:
 
 # Will be run in Travis CI on tagged commits
 release: virtualenv
-	env KUBERNAUT_VERSION=$(VERSION) packaging/homebrew-package.sh
-	packaging/create-linux-packages.py $(VERSION)
-	packaging/upload-linux-packages.py $(VERSION)
+	#env KUBERNAUT_VERSION=$(VERSION) packaging/homebrew-package.sh
+	env KUBERNAUT_VERSION=$(VERSION) packaging/create-linux-packages.py $(VERSION)
+	env KUBERNAUT_VERSION=$(VERSION) packaging/upload-linux-packages.py $(VERSION)

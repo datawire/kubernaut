@@ -6,3 +6,5 @@ virtualenv
 *.pyc
 *.egg-info
 
+# --- Packaging ---
+packaging/homebrew.rsa

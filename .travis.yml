@@ -1,0 +1,43 @@
+---
+language: python
+python:
+  - "3.5"
+
+# Only build master branch and tags of form 0.1 or 1.0.2 (all PRs will be built):
+branches:
+  only:
+    - master
+    - /^\d+\.\d+(\.\d+)?$/
+
+# Run on Linux and OS X:
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      cache:
+        directories:
+          - "$HOME/.cache/pip/wheels/"
+
+# Install various dependencies:
+before_install:
+  #- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ; fi
+  #- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ; fi
+  # Record some debugging info:
+  - python --version
+  - python2 --version
+  - python3 --version
+
+install:
+  - make virtualenv
+
+script:
+   - mkdir ~/kubernaut-bin
+   - export KUBERNAUT_VERSION=$(make version)
+
+deploy:
+  provider: script
+  skip_cleanup: true
+  script: ci/release.sh
+  on:
+    tags: true
+    branch: master

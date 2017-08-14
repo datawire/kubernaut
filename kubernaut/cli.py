@@ -131,7 +131,7 @@ def cli():
     """kubernaut: easy kubernetes clusters for painless development and testing"""
 
 
-@cli.command("claim", help="claim your Kubernetes cluster")
+@cli.command("claim", help="Claim a Kubernetes cluster")
 @common_options
 def cli_claim(server):
     url = '{}/cluster'.format(server)
@@ -145,7 +145,7 @@ def cli_claim(server):
                 "Wrote kubernetes config to {}".format((kubeconfig_root / "kubernaut")))
 
 
-@cli.command("kubeconfig", help="retrieve clusters kubeconfig")
+@cli.command("kubeconfig", help="Get a clusters kubeconfig")
 @click.option(
     '-p', '--path-only',
     help='Only print the path after the command exits',
@@ -167,7 +167,7 @@ def cli_get_kubeconfig(server, path_only):
                 click.echo("Wrote kubernetes config to {}".format((kubeconfig_root / PROGRAM_NAME)))
 
 
-@cli.command("discard", help="Discard a previously claimed Kubernaut instance")
+@cli.command("discard", help="Discard a previously claimed Kubernetes cluster")
 @common_options
 def cli_discard(server):
     url = '{}/cluster'.format(server)
@@ -175,12 +175,12 @@ def cli_discard(server):
     handle_response(resp)
 
 
-@cli.command("get-token", help="Retrieve a token to use the Kubernaut.io service.")
+@cli.command("get-token", help="Retrieve a token to use the Kubernaut service")
 def cli_get_token():
     click.echo(LOGIN_MSG)
 
 
-@cli.command("set-token", help="Set a retrieved token.")
+@cli.command("set-token", help="Set a token to use the Kubernaut service")
 @click.argument("token")
 @common_options
 def cli_set_token(server, token):
