@@ -17,6 +17,8 @@ from sys import exit
 # Constants
 # ----------------------------------------------------------------------------------------------------------------------
 
+CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
+
 PROGRAM_NAME = "kubernaut"
 
 KUBERNAUT_HTTPS = getenv("KUBERNAUT_HTTPS", "1").lower() in {"1", "true", "yes"}
@@ -33,9 +35,9 @@ VERSION_OUTDATED_MSG = "Your version of %(prog)s is out of date! The latest vers
                        " Please go to " + click.style("https://github.com/datawire/kubernaut", underline=True) + \
                        " for update instructions."
 
-LOGIN_MSG = click.style("Kubernaut is a free service! Please login to use Kubernaut => ") + \
-            click.style("https://kubernaut.io/login", bold=True, underline=True) + \
-            "\n"
+LOGIN_MSG = click.style("Kubernaut is a free service! Please get an access token to use Kubernaut => ") + \
+            click.style("https://kubernaut.io/token", bold=True, underline=True) + "\n\n" + \
+            click.style("Once you have your token please run `kubernaut set-token <TOKEN>`")
 
 USER_AGENT = "{0}/{1} ({2}; {3})".format(PROGRAM_NAME, __version__, platform.system(), platform.release())
 
@@ -63,18 +65,17 @@ scout = Scout(PROGRAM_NAME, __version__)
 
 
 def save_config(config_data):
-    with config_file.open('w+') as f:
-        json.dump(config_data, f, indent=2)
+    with config_file.open('w+') as cf:
+        json.dump(config_data, cf, indent=2)
 
 
 def get_jwt(server):
-    credentials = config.get('credentials', {})
     s = server.split("://")[1]
-    if s not in credentials:
-        click.echo("Credentials not found for {}. Please login first with `kubernaut login`.".format(server))
+    if s not in config:
+        click.echo("Token not found for Kubernaut. Please get a token first with `kubernaut get-token`.".format(server))
         exit(1)
 
-    return credentials[s]['token']
+    return config.get(s).get('token')
 
 
 def create_headers(server):
@@ -174,6 +175,14 @@ def cli_discard(server):
     handle_response(resp)
 
 
-@cli.command("login", help="Login to use the kubernaut.io service")
-def cli_login():
+@cli.command("get-token", help="Retrieve a token to use the Kubernaut.io service.")
+def cli_get_token():
     click.echo(LOGIN_MSG)
+
+
+@cli.command("set-token", help="Set a retrieved token.")
+@click.argument("token")
+@common_options
+def cli_set_token(server, token):
+    config[server.split("://")[1]] = {"token": token}
+    save_config(config)
