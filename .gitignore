@@ -4,5 +4,5 @@
 # --- Python ---
 virtualenv
 *.pyc
-
+*.egg-info
 

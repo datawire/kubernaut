@@ -10,3 +10,4 @@ All notable changes to this project will be documented in this file.
 - Command for discarding a cluster
 - Command for getting and setting a token
 - Config file (`${HOME}/.config/kubernaut/config.json`)
+- README with install and usage instructions.
