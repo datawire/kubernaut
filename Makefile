@@ -1,6 +1,6 @@
 .PHONY: default release
 
-#VERSION=$(shell git describe --tags)
+VERSION=$(shell git describe --tags)
 SHELL:=/bin/bash
 
 default:
