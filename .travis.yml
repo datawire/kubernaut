@@ -22,11 +22,7 @@ matrix:
         directories:
           - "$HOME/.cache/pip/wheels/"
 
-# Install various dependencies:
 before_install:
-  #- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ; fi
-  #- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ; fi
-  # Record some debugging info:
   - gem install package_cloud
   - python --version
   - python2 --version
