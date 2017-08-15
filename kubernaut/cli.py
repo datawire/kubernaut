@@ -46,7 +46,7 @@ USER_AGENT = "{0}/{1} ({2}; {3})".format(PROGRAM_NAME, __version__, platform.sys
 # ----------------------------------------------------------------------------------------------------------------------
 
 config_root = Path.home() / ".config" / PROGRAM_NAME
-config_root.mkdir(exist_ok=True)
+config_root.mkdir(parents=True, exist_ok=True)
 config_file = config_root / 'config.json'
 
 with config_file.open('a+') as f:
