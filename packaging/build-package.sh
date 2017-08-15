@@ -14,7 +14,7 @@ trap 'chown -R --reference /build-inside/build-package.sh /out/' EXIT
 
 # Package only includes /usr/bin/telepresence:
 mkdir /tmp/build
-cp /source/kubernaut /tmp/build
+cp /source/out/kubernaut /tmp/build
 cd /out
 fpm -t "$PACKAGE_TYPE" \
     --name kubernaut \

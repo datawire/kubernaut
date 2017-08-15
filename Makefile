@@ -1,6 +1,7 @@
 .PHONY: default release
 
-VERSION=$(shell git describe --tags)
+#VERSION=$(shell git describe --tags)
+VERSION=0.1.0
 SHELL:=/bin/bash
 
 default:
@@ -8,6 +9,9 @@ default:
 
 version:
 	@echo $(VERSION)
+
+build: virtualenv
+	tox -e py3
 
 ## Setup dependencies ##
 
@@ -20,7 +24,7 @@ virtualenv:
 ## Release ##
 
 # Will be run in Travis CI on tagged commits
-release: virtualenv
+release: virtualenv build
 	#env KUBERNAUT_VERSION=$(VERSION) packaging/homebrew-package.sh
 	env KUBERNAUT_VERSION=$(VERSION) packaging/create-linux-packages.py $(VERSION)
 	env KUBERNAUT_VERSION=$(VERSION) packaging/upload-linux-packages.py $(VERSION)

@@ -23,15 +23,16 @@ before_install:
   #- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ; fi
   #- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ; fi
   # Record some debugging info:
+  - gem install package_cloud
   - python --version
   - python2 --version
   - python3 --version
 
 install:
   - make virtualenv
+  - gem install package_cloud
 
 script:
-   - mkdir ~/kubernaut-bin
    - export KUBERNAUT_VERSION=$(make version)
 
 deploy:

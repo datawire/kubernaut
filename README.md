@@ -1,5 +1,7 @@
 # Kubernaut
 
+[![Build Status](https://travis-ci.org/datawire/kubernaut.svg?branch=master)](https://travis-ci.org/datawire/kubernaut)
+
 Kubernaut provides on-demand, ephemeral Kubernetes clusters for development and testing.
 
 Google Container Engine (and its brethren) are great if you need to spin up a cluster for a long-running job (e.g., your cloud service). But what if you want your CI system to run tests on a clean Kubernetes install? Or what if you want to reproduce a specific bug on a specific version of Kubernetes?
@@ -17,14 +19,14 @@ brew cask install datawire/blackbird/kubernaut
 ## Fedora 25 or later
 
 ```bash
-curl -s https://packagecloud.io/install/repositories/datawireio/kubernaut/script.rpm.sh | sudo bash
+curl -s https://packagecloud.io/install/repositories/datawireio/stable/script.rpm.sh | sudo bash
 sudo dnf install kubernaut
 ```
 
 ## Ubuntu 16.04 or later
 
 ```bash
-curl -s https://packagecloud.io/install/repositories/datawireio/kubernaut/script.deb.sh | sudo bash
+curl -s https://packagecloud.io/install/repositories/datawireio/stable/script.deb.sh | sudo bash
 sudo apt install --no-install-recommends kubernaut
 ```
 

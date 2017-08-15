@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 """
 Create Ubuntu and Fedora packages in out/.
 
@@ -25,11 +26,11 @@ def build_package(builder_image, package_type, version, out_dir, dependencies):
         on.
     """
     run([
-        "sudo", "docker", "run", "--rm", "-e", "PACKAGE_VERSION=" + version,
-        "-e", "PACKAGE_TYPE=" + package_type, "-v",
-        "{}:/build-inside:ro".format(THIS_DIRECTORY), "-v",
-        "{}:/source:ro".format(THIS_DIRECTORY.parent), "-v",
-        str(out_dir) + ":/out", "-w", "/build-inside", builder_image,
+        "docker", "run", "--rm", "-e", "PACKAGE_VERSION=" + version,
+        "-e", "PACKAGE_TYPE=" + package_type,
+        "-v", "{}:/build-inside:rw".format(THIS_DIRECTORY),
+        "-v", "{}:/source:rw".format(THIS_DIRECTORY.parent),
+        "-v", str(out_dir) + ":/out", "-w", "/build-inside", builder_image,
         "/build-inside/build-package.sh", *dependencies
     ],
         check=True)
@@ -53,8 +54,10 @@ def test_package(distro_image, package_directory, install_command):
     elif install_command == "rpm":
         install = "dnf -y install /packages/*.rpm"
     run([
-        "sudo", "docker", "run", "--rm", "-v",
-        "{}:/packages:ro".format(package_directory), distro_image, "sh", "-c",
+        "docker", "run", "--rm",
+        "-e", "LC_ALL=C.UTF-8",
+        "-e", "LANG=C.UTF-8",
+        "-v", "{}:/packages:ro".format(package_directory), distro_image, "sh", "-c",
         install + " && kubernaut --version"
     ],
         check=True)
@@ -62,28 +65,26 @@ def test_package(distro_image, package_directory, install_command):
 
 def main(version):
     out = THIS_DIRECTORY / "out"
+
     if out.exists():
         rmtree(str(out))
     out.mkdir()
+
     for ubuntu_distro in ["xenial", "yakkety", "zesty"]:
         distro_out = out / ubuntu_distro
         distro_out.mkdir()
-        image = "alanfranz/fwd-ubuntu-{}:latest".format(ubuntu_distro)
-        # At the moment we need custom image for zesty. This will be
-        # unnecessary once
-        # https://github.com/alanfranz/fpm-within-docker/pull/1 is merged:
-        # if ubuntu_distro == "zesty":
-        #     image = "datawire/fpm-within-docker:zesty"  # PLOMBARDI: alanfranz merged or updated image and closed PR1 hopefully this works
+        image = "alanfranz/fpm-within-docker:ubuntu-{}".format(ubuntu_distro)
 
         build_package(
             image, "deb", version, distro_out, ["python3"]
         )
         test_package("ubuntu:" + ubuntu_distro, distro_out, "deb")
-    for fedora_distro in ["25"]:
+
+    for fedora_distro in ["25", "26"]:
         distro_out = out / ("fedora-" + fedora_distro)
         distro_out.mkdir()
         build_package(
-            "alanfranz/fwd-fedora-{}:latest".format(fedora_distro), "rpm",
+            "alanfranz/fpm-within-docker:fedora-{}".format(fedora_distro), "rpm",
             version, distro_out, ["python3"]
         )
         test_package("fedora:" + fedora_distro, distro_out, "rpm")

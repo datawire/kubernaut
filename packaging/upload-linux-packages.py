@@ -1,7 +1,4 @@
 #!/usr/bin/env python3
-"""
-Upload packages to Bintray repositories.
-"""
 
 import sys
 from pathlib import Path
@@ -41,20 +38,16 @@ class Uploader(object):
         :param version str: Version of package.
         :param extra str: Extra options to attach to end of Bintray URL.
         """
-        run([
-            "package_cloud",
-            "push",
-            "datawireio/kubernaut/" + distro,
-            str(file_path),
-            ],
-            check=True)
+        run(["package_cloud", "push", "datawireio/stable/" + distro, str(file_path)], check=True)
 
 
 def main(version):
     uploader = Uploader(version)
     for release in ["xenial", "yakkety", "zesty"]:
         uploader.upload_ubuntu(release)
-    uploader.upload_fedora("25")
+
+    for release in ["25", "26"]:
+        uploader.upload_fedora(release)
 
 
 if __name__ == '__main__':

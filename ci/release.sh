@@ -8,12 +8,12 @@ fi
 
 # Store the SSH key used to push to github.com/datawire/homebrew-blackbird; this
 # key is set as environment variable on Travis repo:
-echo -e "$HOMEBREW_KEY" > packaging/homebrew.rsa
-chmod 600 packaging/homebrew.rsa
+#echo -e "$HOMEBREW_KEY" > packaging/homebrew.rsa
+#chmod 600 packaging/homebrew.rsa
 
 # Add ssh keys we need to push to github.com/datawire/homebrew-blackbird:
-eval $(ssh-agent)
-ssh-add packaging/homebrew.rsa
+#eval $(ssh-agent)
+#ssh-add packaging/homebrew.rsa
 
 # Install package cloud CLI:
 sudo gem install package_cloud
