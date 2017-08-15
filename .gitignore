@@ -8,5 +8,5 @@ virtualenv
 .tox
 
 # --- Packaging ---
-packaging/homebrew.rsa
+packaging/homebrew_rsa
 out

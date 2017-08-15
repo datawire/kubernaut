@@ -8,12 +8,12 @@ fi
 
 # Store the SSH key used to push to github.com/datawire/homebrew-blackbird; this
 # key is set as environment variable on Travis repo:
-#echo -e "$HOMEBREW_KEY" > packaging/homebrew.rsa
-#chmod 600 packaging/homebrew.rsa
+openssl aes-256-cbc -K $encrypted_a76edca1e45a_key -iv $encrypted_a76edca1e45a_iv -in packaging/homebrew_rsa.enc -out packaging/homebrew_rsa -d
+chmod 600 packaging/homebrew_rsa
 
 # Add ssh keys we need to push to github.com/datawire/homebrew-blackbird:
-#eval $(ssh-agent)
-#ssh-add packaging/homebrew.rsa
+eval $(ssh-agent)
+ssh-add packaging/homebrew_rsa
 
 # Run the release:
 make release

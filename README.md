@@ -71,6 +71,26 @@ Commands:
   set-token   Set a token to use the Kubernaut service
 ```
 
+# Upgrades
+
+## macOS
+
+```bash
+TBD
+```
+
+## Fedora 25 or later
+
+```bash
+sudo dnf upgrade kubernaut
+```
+
+## Ubuntu 16.04 or later
+
+```bash
+sudo apt-get update && apt-get install kubernaut
+```
+
 # License
 
 Licensed under Apache 2.0. Please read [LICENSE](LICENSE) for details.
