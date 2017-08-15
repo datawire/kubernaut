@@ -30,6 +30,7 @@ before_install:
 
 install:
   - make virtualenv
+  - pip install tox-travis
 
 script:
   - export KUBERNAUT_VERSION=$(make version)
