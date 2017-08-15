@@ -17,7 +17,7 @@ build: virtualenv
 
 virtualenv:
 	virtualenv --python=python3 virtualenv
-	virtualenv/bin/pip install -Ur requirements.txt
+	virtualenv/bin/pip install -Ur dev-requirements.txt
 
 ## Development ##
 

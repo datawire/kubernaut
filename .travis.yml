@@ -3,6 +3,10 @@ language: python
 python:
   - "3.5"
 
+env:
+  global:
+    - secure: "Bvua9IUFpCRndqUarW//YyqGpFIl/OCJaaSKxDM8dKfd8wqZNwEfOoKJlO86z8USIK4CZ/PwHA5uTpMMjNj3ZmYE6V0M3GUN6gUhlPuNxbvYScifyjDvEO6xWJwokwA/Vz0ocruWENJz756TIiGxxVF6sTKycN1cbGiVSAeE0k115M83EdwoUjpUESCW/6xFfOfBCmQPIdfhnjPvpfyn9WGo++zwUp9aHtKDQ4D4wH9L75glSKN1gZ9UTcY6QZ5HQl7gzm+dveg3XWZnOmi+pKXocltUKOmw75eFH+iZ9pgZRn1iWKu7LaMc5Og4JBXy98WgG8l6Qi/SHLJLU8xUWJAN9YvPDivun85Rke0Db8N/6APU71FKiXaR9GBMi2E1dpMXyNEKn/gO0SceSkIxe6MXZ2yUlIX/dZ9K653EVPcKpr5tiNSpLyAyO5JHRtu5m+Yh03PGbc6uFOONltus7zVRiS5co//WzH9zvXAcK2A3wyi2GSfI9+er1UwAdYi36IvojfLPx+eUUSZlceD5cq2I+2Fj0C9kddPrI3k16XmxTz9qaDuPDdSSk1pPhq/SSOarapeHKdR3zeI2ZVMfHgt5jQOYGBrj/va8Q/aSdv+YOmOdPMc9e7BlI6PhSwfXWLawlu3o+Zo4mRrICfydQkV9NDPTBXfSEI2suYVAVTs="
+
 # Only build master branch and tags of form 0.1 or 1.0.2 (all PRs will be built):
 branches:
   only:
@@ -30,10 +34,9 @@ before_install:
 
 install:
   - make virtualenv
-  - gem install package_cloud
 
 script:
-   - export KUBERNAUT_VERSION=$(make version)
+  - export KUBERNAUT_VERSION=$(make version)
 
 deploy:
   provider: script
