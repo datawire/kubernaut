@@ -38,7 +38,7 @@ class Uploader(object):
         :param version str: Version of package.
         :param extra str: Extra options to attach to end of Bintray URL.
         """
-        run("package_cloud", "push", "datawireio/stable/" + distro + " " + str(file_path), check=True, shell=True)
+        run("package_cloud " + "push " + "datawireio/stable/" + distro + " " + str(file_path), check=True, shell=True)
 
 
 def main(version):
