@@ -10,7 +10,7 @@ FORMULA="${BUILD_HOMEBREW_DIR}/Formula/kubernaut.rb"
 # Update recipe
 cp packaging/homebrew-formula.rb "$FORMULA"
 sed "s/__NEW_VERSION__/${KUBERNAUT_VERSION}/g" -i "$FORMULA"
-TARBALL_HASH=$(curl --silent -L "https://gitlab.com/datawire/kubernaut/repository/archive.tar.gz?ref=${KUBERNAUT_VERSION}" | sha256sum | cut -f 1 -d " ")
+TARBALL_HASH=$(curl --silent -L "https://github.com/datawire/kubernaut/archive/${KUBERNAUT_VERSION}.tar.gz" | sha256sum | cut -f 1 -d " ")
 sed "s/__TARBALL_HASH__/${TARBALL_HASH}/g" -i "$FORMULA"
 cd "${BUILD_HOMEBREW_DIR}"
 git add "$FORMULA"

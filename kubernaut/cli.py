@@ -5,6 +5,7 @@ import json
 import functools
 import platform
 import requests
+from uuid import uuid4
 from .scout_client import Scout
 from . import __version__
 
@@ -48,16 +49,25 @@ USER_AGENT = "{0}/{1} ({2}; {3})".format(PROGRAM_NAME, __version__, platform.sys
 config_root = Path.home() / ".config" / PROGRAM_NAME
 config_root.mkdir(parents=True, exist_ok=True)
 config_file = config_root / 'config.json'
+id_file = config_root / 'id'
 
 with config_file.open('a+') as f:
     f.seek(0)
     data = f.read() or '{}'
     config = json.loads(data)
 
+try:
+    with id_file.open('x') as f:
+        install_id = str(uuid4())
+        f.write(install_id)
+except FileExistsError:
+    with id_file.open('r') as f:
+        install_id = f.read()
+
 kubeconfig_root = Path.home() / ".kube"
 kubeconfig_root.mkdir(exist_ok=True)
 
-scout = Scout(PROGRAM_NAME, __version__)
+scout = Scout(PROGRAM_NAME, install_id, __version__)
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Utility Functions

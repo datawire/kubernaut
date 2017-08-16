@@ -5,7 +5,7 @@ class Kubernaut < Formula
 
   desc     "On-demand, ephemeral Kubernetes clusters for development and testing"
   homepage "https://github.com/datawire/kubernaut"
-  url      "https://gitlab.com/datawire/kubernaut/repository/archive.tar.gz?ref=__NEW_VERSION__"
+  url      "https://github.com/datawire/kubernaut/archive/__NEW_VERSION__.tar.gz"
   sha256   "__TARBALL_HASH__"
 
   depends_on "python3"
