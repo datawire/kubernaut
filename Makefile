@@ -27,4 +27,4 @@ release: virtualenv build
 #	env KUBERNAUT_VERSION=$(VERSION) packaging/homebrew-package.sh
 	env KUBERNAUT_VERSION=$(VERSION) packaging/create-linux-packages.py $(VERSION)
 #	env KUBERNAUT_VERSION=$(VERSION) packaging/upload-linux-packages.py $(VERSION)
-    env KUBERNAUT_VERSION=$(VERSION) packaging/upload_packages.sh
+	env KUBERNAUT_VERSION=$(VERSION) packaging/upload_packages.sh
