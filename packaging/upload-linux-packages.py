@@ -38,7 +38,7 @@ class Uploader(object):
         :param version str: Version of package.
         :param extra str: Extra options to attach to end of Bintray URL.
         """
-        run(["package_cloud", "push", "datawireio/stable/" + distro, str(file_path)], check=True)
+        run(["/home/travis/.rvm/gems/ruby-2.4.1/bin/package_cloud", "push", "datawireio/stable/" + distro, str(file_path)], check=True)
 
 
 def main(version):
