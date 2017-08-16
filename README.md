@@ -12,7 +12,7 @@ In these situations, you not only want an on-demand cluster -- you want it to go
 
 ## macOS
 
-Kubernaut is in early development and we have not finished the macOS installation process. [Issue #3 (GH-3)]((/../../issues/3)) exists to track progress. In the meantime the recommended way to install Kubernaut on macOS is via `pip`.
+Kubernaut is in early development and we have not finished the macOS installation process. [Issue #3 (GH-3)]((../../issues/3) exists to track progress. In the meantime the recommended way to install Kubernaut on macOS is via `pip`.
 
 ```bash
 $ brew install python3
