@@ -1,3 +1,6 @@
+from . import __version__
+
+
 class Scout:
 
     def __init__(self, application, version, install_id, scout_host="kubernaut.io/scout"):
@@ -17,6 +20,7 @@ class Scout:
 
     def send(self, metadata):
         import requests
+        result = {'latest_version': __version__}  # default to current version
 
         if not self.disabled:
             payload = {
@@ -28,8 +32,10 @@ class Scout:
 
             try:
                 resp = requests.post("https://{0}".format(self.scout_host), json=payload, timeout=1)
-                return resp.json
+                success = resp.status_code / 100 == 2
+                if success:
+                    result = resp.json()
             except:
-                return {'latest_version': '1.0.0'}
-        else:
-            return {}
+                pass
+
+        return result
