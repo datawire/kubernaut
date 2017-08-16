@@ -12,22 +12,25 @@ In these situations, you not only want an on-demand cluster -- you want it to go
 
 ## macOS
 
+Kubernaut is in early development and we have not finished the macOS installation process. [Issue #3 (GH-3)]((/../../issues/3)) exists to track progress. In the meantime the recommended way to install Kubernaut on macOS is via `pip`.
+
 ```bash
-brew cask install datawire/blackbird/kubernaut
+$ brew install python3
+$ pip3 install install git+git://github.com/myuser/foo.git@newbranch
 ```
 
 ## Fedora 25 or later
 
 ```bash
-curl -s https://packagecloud.io/install/repositories/datawireio/stable/script.rpm.sh | sudo bash
-sudo dnf install kubernaut
+$ curl -s https://packagecloud.io/install/repositories/datawireio/stable/script.rpm.sh | sudo bash
+$ sudo dnf install kubernaut
 ```
 
 ## Ubuntu 16.04 or later
 
 ```bash
-curl -s https://packagecloud.io/install/repositories/datawireio/stable/script.deb.sh | sudo bash
-sudo apt install --no-install-recommends kubernaut
+$ curl -s https://packagecloud.io/install/repositories/datawireio/stable/script.deb.sh | sudo bash
+$ sudo apt install kubernaut
 ```
 
 # Quick Start
@@ -48,6 +51,10 @@ sudo apt install --no-install-recommends kubernaut
     ```
 
 5. When you are all done use `kubernaut discard` to release the cluster or if you are lazy and forget about it then the cluster will be automatically terminated after 60 minutes.
+
+# Feature Requests and Bug Reports
+
+We are open to suggestions about new and exciting features along with receiving bug reports. You can report feature requests for either the CLI app or the [kubernaut.io](https://github.com/datawire/kubernaut) service in this repository.
 
 # Command Reference
 
@@ -76,20 +83,47 @@ Commands:
 ## macOS
 
 ```bash
-TBD
+$ pip install -U kubernaut
 ```
 
 ## Fedora 25 or later
 
 ```bash
-sudo dnf upgrade kubernaut
+$ sudo dnf upgrade kubernaut
 ```
 
 ## Ubuntu 16.04 or later
 
 ```bash
-sudo apt-get update && apt-get install kubernaut
+$ sudo apt-get update && apt-get install kubernaut
 ```
+
+# Usage Reporting
+
+Kubernaut collects some basic information about its users so it can send important client notices such as new version availability and security bulletins. We also use the information to anonymously aggregate basic usage analytics.
+
+## Why?
+
+- We want to know how you are using our software, so we can make it better for you. Knowing what versions are being used, in aggregate, is very helpful for development and testing.
+- We ship new releases frequently, with new features and bug fixes. We want you to know when we ship a new release.
+
+## What is collected?
+
+The following information is collected and sent during version checks:
+
+- Application Name ("kubernaut")
+- Application Version
+- Install Identifier
+
+The reporting code can be found in [scout.py](kubernaut/scout_client.py).
+
+## When is it collected?
+
+We collect information during version checks. 
+
+## Can it be disabled?
+
+Yes! Set an environment variable `SCOUT_DISABLED=1`. 
 
 # License
 

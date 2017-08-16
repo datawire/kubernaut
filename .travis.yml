@@ -27,13 +27,13 @@ matrix:
 
 before_install:
   - gem install package_cloud
+  - pip install tox-travis homebrew-pypi-poet
   - python --version
   - python2 --version
   - python3 --version
 
 install:
   - make virtualenv
-  - pip install tox-travis
 
 script:
   - export KUBERNAUT_VERSION=$(make version)
