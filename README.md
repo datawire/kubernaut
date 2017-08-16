@@ -113,17 +113,17 @@ The following information is collected and sent during version checks:
 
 - Application Name ("kubernaut")
 - Application Version
-- Install Identifier
+- Install Identifier (locally generated for only Kubernaut and stored in `${HOME}/.config/kubernaut/id`).
 
 The reporting code can be found in [scout.py](kubernaut/scout_client.py).
 
 ## When is it collected?
 
-We collect information during version checks. 
+We collect information during software version checks. We check versions during any command invocation.
 
 ## Can it be disabled?
 
-Yes! Set an environment variable `SCOUT_DISABLED=1`. 
+Yes! Set an environment variable `SCOUT_DISABLE=1`.
 
 # License
 

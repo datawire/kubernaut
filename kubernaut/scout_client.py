@@ -16,7 +16,7 @@ class Scout:
         self.version = str(version)
         self.install_id = str(install_id)
         self.scout_host = str(scout_host)
-        self.disabled = os.getenv("SCOUT_DISABLED", "0").lower() in {"1", "true", "yes"}
+        self.disabled = os.getenv("SCOUT_DISABLE", "0").lower() in {"1", "true", "yes"}
 
     def send(self, metadata):
         import requests
