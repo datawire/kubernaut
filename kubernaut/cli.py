@@ -67,7 +67,7 @@ except FileExistsError:
 kubeconfig_root = Path.home() / ".kube"
 kubeconfig_root.mkdir(exist_ok=True)
 
-scout = Scout(PROGRAM_NAME, install_id, __version__)
+scout = Scout(PROGRAM_NAME, install_id, USER_AGENT, __version__)
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Utility Functions

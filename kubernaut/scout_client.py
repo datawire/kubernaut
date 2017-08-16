@@ -3,7 +3,7 @@ from . import __version__
 
 class Scout:
 
-    def __init__(self, application, version, install_id, scout_host="kubernaut.io/scout"):
+    def __init__(self, application, version, install_id, user_agent, scout_host="kubernaut.io/scout"):
         import os
 
         if not isinstance(application, str) or str(application).strip() == '':
@@ -15,6 +15,7 @@ class Scout:
         self.application = str(application)
         self.version = str(version)
         self.install_id = str(install_id)
+        self.user_agent = str(user_agent)
         self.scout_host = str(scout_host)
         self.disabled = os.getenv("SCOUT_DISABLE", "0").lower() in {"1", "true", "yes"}
 
@@ -30,8 +31,10 @@ class Scout:
                 'metadata': metadata or {}
             }
 
+            headers = {'User-Agent': self.user_agent}
+
             try:
-                resp = requests.post("https://{0}".format(self.scout_host), json=payload, timeout=1)
+                resp = requests.post("https://{0}".format(self.scout_host), headers=headers, json=payload, timeout=1)
                 success = resp.status_code / 100 == 2
                 if success:
                     result = resp.json()
