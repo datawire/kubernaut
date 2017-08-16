@@ -53,12 +53,13 @@ def test_package(distro_image, package_directory, install_command):
         )
     elif install_command == "rpm":
         install = "dnf -y install /packages/*.rpm"
+
     run([
         "docker", "run", "--rm",
         "-e", "LC_ALL=C.UTF-8",
         "-e", "LANG=C.UTF-8",
         "-v", "{}:/packages:ro".format(package_directory), distro_image, "sh", "-c",
-        install + " && kubernaut --version"
+        install + " && kubernaut --help"
     ],
         check=True)
 
