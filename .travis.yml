@@ -27,6 +27,8 @@ matrix:
 
 before_install:
   - gem install package_cloud
+  - package_cloud version
+
   - pip install tox-travis homebrew-pypi-poet
   - python --version
   - python2 --version
