@@ -39,9 +39,16 @@ script:
   - export KUBERNAUT_VERSION=$(make version)
 
 deploy:
-  provider: script
-  skip_cleanup: true
-  script: ci/release.sh
-  on:
-    tags: true
-    branch: master
+  - provider: script
+    skip_cleanup: true
+    script: ci/release.sh
+    on:
+      tags: true
+      branch: master
+  - provider: pypi
+    user: d6e-automaton
+    password:
+      - secure: "2ZfYht8q/4sCSqR4IdSG2iTEUiIBCY0ddjBtZLQsftgGBf7B9dGPsUdKArRxTFpp08jFVY5W7yeTLBFQCtqEm/9QzNmWS+VmG/6t5fTzB83m2PTmBYFSe4+xTuadvjFqoNeW0DvznB8SA3OpovyAEb+ZH5H8kFiySfxENfB4h/0acZtR+v9UOfujgLSVISOo1FV9gsmbuLfmJxeckcRqrWKrw97YTyMUtzt037pGXqR8UQveLRgRWl0raCa74/9mrEgfUWVFNn95yFJqD+VmJDmQVv839hL3gxkxLzAnnrs2TIgJ4RzsQmkJQTJ1xCyyzilM1+oqhjWvQAiweluHh7w/Sc/XQcd4f1qoGCPTIgdEJsNQnJBqItbsnK0lteZ43EK83BGcn+EeCGKmssKHehx5uQhlAipvalwy9yop0cKm5nW1SC9rRTWR751GilvZR4Q9PTG6ndbyg/1yz615zctkq0EsjR8miV82qEzxOaqfxMQ5+tFN+cXnEU2Y7kimaLUDnmYHCB1OkF/oVf6rxYAZ2D+0SyvJLOz7Es28PCIIp3x1nLXF8tCCvynwvJziZrg9s9/MFjZPLZS4SkeJeP4GhTRLTKJXyFomLUDv8iBkWM8/GdLviPAVMGDhrtg/EndlpnOuvXrsHOhUpLThBjFUaAoJkgdlbL+7uVMEAls="
+    on:
+      tags: true
+      branch: master
