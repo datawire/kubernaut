@@ -1,2 +1,3 @@
+certifi
 click
 requests
