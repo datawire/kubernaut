@@ -21,9 +21,15 @@ class Scout:
 
     def send(self, metadata):
         import requests
+        import os
+
         result = {'latest_version': __version__}  # default to current version
 
+        print("SCOUT_DISABLED={}".format(str(self.disabled)))
+        print(os.environ)
+
         if not self.disabled:
+            print("SCOUT REPORTING")
             payload = {
                 'application': self.application,
                 'install_id': self.install_id,
