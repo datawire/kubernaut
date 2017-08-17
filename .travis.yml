@@ -32,6 +32,7 @@ install:
 
 script:
   - export KUBERNAUT_VERSION=$(make version)
+  - export SCOUT_DISABLE=1
   - make build
 
 deploy:
