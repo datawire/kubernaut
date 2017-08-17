@@ -46,6 +46,7 @@ cat << EOF > app.json
 }
 EOF
 
+export AWS_DEFAULT_REGION=us-east-1
 aws s3api put-object \
     --bucket scout-datawire-io \
     --key kubernaut/app.json \
