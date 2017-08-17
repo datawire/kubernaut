@@ -15,6 +15,9 @@ chmod 600 packaging/homebrew_rsa
 eval $(ssh-agent)
 ssh-add packaging/homebrew_rsa
 
+# this should have already been done... but it's not there either wtfsauce
+gem install package_cloud
+
 # Run the release:
 make release
 
