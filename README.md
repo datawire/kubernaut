@@ -1,5 +1,6 @@
 # Kubernaut
 
+[![Join the chat at https://gitter.im/datawire/kubernaut](https://badges.gitter.im/datawire/kubernaut.svg)](https://gitter.im/datawire/kubernaut?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/datawire/kubernaut.svg?branch=master)](https://travis-ci.org/datawire/kubernaut)
 
 Kubernaut provides on-demand, ephemeral Kubernetes clusters for development and testing.
