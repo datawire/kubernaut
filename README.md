@@ -84,7 +84,7 @@ Commands:
 ## macOS
 
 ```bash
-$ pip install -U kubernaut
+$ pip3 install -U kubernaut
 ```
 
 ## Fedora 25 or later
