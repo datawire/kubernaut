@@ -16,7 +16,7 @@ Kubernaut is in early development and we have not finished the macOS installatio
 
 ```bash
 $ brew install python3
-$ pip3 install install git+git://github.com/myuser/foo.git@newbranch
+$ pip3 install git+git://github.com/myuser/foo.git@newbranch
 ```
 
 ## Fedora 25 or later
