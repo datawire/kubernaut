@@ -37,3 +37,16 @@ password=${PYPI_PASSWORD}
 EOF
 
 python setup.py sdist upload -r pypi
+
+cat << EOF > app.json
+{
+  "application": "kubernaut",
+  "latest_version": "${KUBERNAUT_VERSION}",
+  "notices": []
+}
+EOF
+
+aws s3api put-object \
+    --bucket scout-datawire-io \
+    --key kubernaut/app.json \
+    --body app.json

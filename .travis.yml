@@ -5,7 +5,7 @@ python:
 
 env:
   global:
-    - secure: "aylndjBHlCj1s7WltItgjLOqf2HsEibo1k78IX7iXS8Dgld1AKI73g1926sJHI2NsEXqe0BC8eW3GxSUCAtBPsKNPur6OgkBY8GxLVdfMkZcU//N/oDChfro5jgOXIDKrKqgVZ5mFvtRwqfdDkKc7K2Pa520Wz1EXV86/7Br2B2E3iYnOAvlnonkThTrM+OathuuNYVeMMUW5GF8ns2T/HkuCnQyTtUwVIzw4DaRGh3jo4/QqKS80J/CmyJMOSr3T49TjhqGYFPTE8WEtEIZUim8XNV7PpdIPaJwlBgwCwuu+HZRCI3YHZeH+tLCFefper4lB63HqR+G37VoVVrOLMgkVwya6c3U7Y44/92l0aNoIWzyockhxr0f4wMRMWCu4QdIjwCIAs11oYm36YZKdbGqhxxdcYPzYlVzjwTfwOQscaOcvpDtBjxscsDmKampj30xrEJXASiwN/eBoc4cAcdQegsiXbmyXNBgFcAMASdur6Xu35U9FBM1CQElTiuGnLTScb/fTLbrkZ1Ine6HTrUhjqoroL6TCQDev2gpxwZVtpp3iQIg1n0ucAiokZyWSR+p4NN7VLlUSrXEGcNhVbfm3CLkiZ2WlqXwpVVcMAGbz/ovaI9yNsb/16lG7Hw4odpCRbH9uWYgEp/1iy4+NLSgpBmO1YYv5UVTFOIO8JQ="
+    - secure: "elVwcLP2n04gNRBRfMl0+s0qiFOzZ9mqDBpyV5ylpkRdAdNQStAwLEyGs9cQsXTDwRuAPPffMPcBapwwJVoKIETcUE6RsFsK90y54w7yZKwtRLZvLv9K/XSaPsDdLiOZSDkejA5SB9M+FgseVCmV4pURRXqUxgtNoHDMbIZYF/9xKzjslTlBlwgsPprs5Nv5Pp6gxL3h+n9j3fM3gNIenSsz1un1DG0ly+kWU2KMu0ujj1yLAUVpXn3BYM+h1nuCmqUhm4/z5Bwqv3NuWyDkOmIJs72KhRZpdwDb0tn041pAXAdjCFM0vdQXbskwoN9sN5Ql4g+OamdereIUW4ZP3s5GmQ8YfJYWVizn9jmfXY2KZWjmuRebtpktAjbfpmIeriVli+IAXiIshiM++/4uSyvDHOQ8otVy38HmWD+6T0ci7ZPggHqYGLt7QGxZgKhi0f/JoVYzpWRLxpuspIT7yLJyRXvSDvlUUsOe0VfTSNH3lLzF+gTpfsskgmVnDJZ2ma/qhibwwBxOTJAh7dXt30vBqqv4shRKVzCTUSuYnUANWU24K4Rc5Tj2hQlKjaTJRri1v8LD+rkg1EhF9hj290EI7SDjuXTpmOjccyr+bSkgqHZXZynnlMcOVzixXzj7Ep3PpPEDgo4i2hk9nN8LGvNCxUOFafE+VyXWlaGov6k="
 
 services:
   - docker
@@ -21,7 +21,7 @@ before_install:
   - package_cloud version
   - which package_cloud
 
-  - pip install tox-travis homebrew-pypi-poet
+  - pip install tox-travis homebrew-pypi-poet awscli
   - python --version
   - python2 --version
   - python3 --version

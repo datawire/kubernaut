@@ -42,6 +42,10 @@ LOGIN_MSG = click.style("Kubernaut is a free service! Please get an access token
 
 USER_AGENT = "{0}/{1} ({2}; {3})".format(PROGRAM_NAME, __version__, platform.system(), platform.release())
 
+CLAIM_LIMITATION_MSGS = [
+    click.style("Warning: ", fg="yellow", bold=True) + click.style("Kubernaut does not currently support LoadBalancer services!")
+]
+
 # ----------------------------------------------------------------------------------------------------------------------
 # Configuration
 # ----------------------------------------------------------------------------------------------------------------------
@@ -149,6 +153,10 @@ def cli_claim(server):
 
     handle_response(resp)
     if resp.status_code == 200:
+        for m in CLAIM_LIMITATION_MSGS:
+            click.echo(m)
+            click.echo()
+
         with (kubeconfig_root / PROGRAM_NAME).open("w+") as f:
             f.write(resp.text)
             click.echo(
