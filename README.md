@@ -124,7 +124,7 @@ The following information is collected and sent during version checks:
 - Install Identifier (locally generated for only Kubernaut and stored in `${HOME}/.config/kubernaut/id`)
 - Platform Information (Operating System)
 
-The reporting code can be found in [scout.py](kubernaut/scout_client.py).
+The reporting code can be found in [scout_client.py](kubernaut/scout_client.py).
 
 ## When is it collected?
 
