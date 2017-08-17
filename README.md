@@ -1,5 +1,6 @@
 # Kubernaut
 
+[![Join the chat at https://gitter.im/datawire/kubernaut](https://badges.gitter.im/datawire/kubernaut.svg)](https://gitter.im/datawire/kubernaut?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/datawire/kubernaut.svg?branch=master)](https://travis-ci.org/datawire/kubernaut)
 
 Kubernaut provides on-demand, ephemeral Kubernetes clusters for development and testing.
@@ -83,7 +84,7 @@ Commands:
 ## macOS
 
 ```bash
-$ pip install -U kubernaut
+$ pip3 install -U kubernaut
 ```
 
 ## Fedora 25 or later
@@ -104,7 +105,7 @@ Nothing is perfect. Below are some known limitations.
 
 ## LoadBalancer service is stuck in "Pending" state.
 
-Kubernaut does not currently support LoadBalancer (`type: LoadBalancer`) services. If this feature is important to you please comment or vote in [Issue #4 (GH-4)](../../issues/4).
+Kubernaut does not currently support LoadBalancer (`type: LoadBalancer`) services. If this feature is important to you please comment or vote in [Issue #4 (GH-4)](../../issues/4). You can use [Telepresence](https://www.telepresence.io) to run a local shell to connect to services on your cluster.
 
 # Usage Reporting
 
