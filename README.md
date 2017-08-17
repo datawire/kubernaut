@@ -105,7 +105,7 @@ Nothing is perfect. Below are some known limitations.
 
 ## LoadBalancer service is stuck in "Pending" state.
 
-Kubernaut does not currently support LoadBalancer (`type: LoadBalancer`) services. If this feature is important to you please comment or vote in [Issue #4 (GH-4)](../../issues/4).
+Kubernaut does not currently support LoadBalancer (`type: LoadBalancer`) services. If this feature is important to you please comment or vote in [Issue #4 (GH-4)](../../issues/4). You can use [Telepresence](https://www.telepresence.io) to run a local shell to connect to services on your cluster.
 
 # Usage Reporting
 
