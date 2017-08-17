@@ -17,3 +17,20 @@ ssh-add packaging/homebrew_rsa
 
 # Run the release:
 make release
+
+cat << EOF > ~/.pypirc
+[distutils]
+index-servers =
+  pypi
+  pypitest
+
+[pypi]
+username=d6e-automaton
+password=${PYPI_PASSWORD}
+
+[pypitest]
+username=d6e-automaton
+password=${PYPI_PASSWORD}
+EOF
+
+python setup.py sdist upload -r pypi
