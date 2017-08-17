@@ -98,6 +98,14 @@ $ sudo dnf upgrade kubernaut
 $ sudo apt-get update && apt-get install kubernaut
 ```
 
+# Known Limitations
+
+Nothing is perfect. Below are some known limitations.
+
+## LoadBalancer service is stuck in "Pending" state.
+
+Kubernaut does not currently support LoadBalancer (`type: LoadBalancer`) services. If this feature is important to you please comment or vote in [Issue #4 (GH-4)](../../issues/4).
+
 # Usage Reporting
 
 Kubernaut collects some basic information about its users so it can send important client notices such as new version availability and security bulletins. We also use the information to anonymously aggregate basic usage analytics.
