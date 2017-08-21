@@ -6,9 +6,8 @@ import functools
 import platform
 import requests
 from uuid import uuid4
-from .scout_client import Scout
 from . import __version__
-
+from scout import Scout
 
 from pathlib import Path
 from os import getenv
@@ -71,7 +70,7 @@ except FileExistsError:
 kubeconfig_root = Path.home() / ".kube"
 kubeconfig_root.mkdir(exist_ok=True)
 
-scout = Scout(PROGRAM_NAME, __version__, install_id, USER_AGENT)
+scout = Scout(PROGRAM_NAME, __version__, install_id)
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Utility Functions
@@ -126,7 +125,7 @@ def common_options(func):
 def create_version_message():
     msg = "%(prog)s v%(version)s"
 
-    resp = scout.send({})
+    resp = scout.report()
 
     latest_version = resp.get('latest_version', __version__)
     if latest_version != __version__:

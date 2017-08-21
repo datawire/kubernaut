@@ -10,7 +10,11 @@ setup(
     include_package_data=True,
     install_requires=[
         "click",
-        "requests"
+        "requests",
+        "setup.py==0.1.1"
+    ],
+    dependency_links=[
+        "git+git://github.com/datawire/scout.py.git@0.1.1#egg=setup.py-0.1.1"
     ],
     entry_points="""
         [console_scripts]
