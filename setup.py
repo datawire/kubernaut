@@ -11,10 +11,7 @@ setup(
     install_requires=[
         "click",
         "requests",
-        "scout.py==0.1.1"
-    ],
-    dependency_links=[
-        "git+git://github.com/datawire/scout.py.git@0.1.1#egg=scout.py-0.1.1"
+        "scout.py"
     ],
     entry_points="""
         [console_scripts]
