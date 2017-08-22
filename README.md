@@ -99,6 +99,12 @@ $ sudo dnf upgrade kubernaut
 $ sudo apt-get update && apt-get install kubernaut
 ```
 
+# Examples
+
+## Travis CI
+
+Examples of using Kubernaut from a [Travis-CI](https://travis-ci.org) build can be found in the [examples/travis-ci](examples/travis-ci) directory.
+
 # Known Limitations
 
 Nothing is perfect. Below are some known limitations.
@@ -123,9 +129,9 @@ The following information is collected and sent during version checks:
 - Application Name ("kubernaut")
 - Application Version
 - Install Identifier (locally generated for only Kubernaut and stored in `${HOME}/.config/kubernaut/id`)
-- Platform Information (Operating System)
+- Platform Information (Operating System, Python version)
 
-The reporting code can be found in [scout_client.py](kubernaut/scout_client.py).
+The reporting code can be found in [datawire/scout.py](https://github.com/datawire/scout.py).
 
 ## When is it collected?
 
