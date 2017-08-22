@@ -99,6 +99,12 @@ $ sudo dnf upgrade kubernaut
 $ sudo apt-get update && apt-get install kubernaut
 ```
 
+# Examples
+
+## Travis CI
+
+Examples of using Kubernaut from a [Travis-CI](https://travis-ci.org) build can be found in the [examples/travis-ci](examples/travis-ci) directory.
+
 # Known Limitations
 
 Nothing is perfect. Below are some known limitations.
