@@ -1,3 +1,1 @@
-click
-pytest
-requests
+-r requirements.txt
