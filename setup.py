@@ -1,13 +1,7 @@
-import os
 import versioneer
 
 from setuptools import setup, find_packages
 
-ROOT_DIR = os.path.dirname(__file__)
-
-with open(os.path.join(ROOT_DIR, "requirements.txt")) as fp:
-    install_requirements = [i.strip() for i in list(fp)
-                            if i.strip() and not i.strip().startswith("#")]
 
 setup(
     name="kubernaut",
@@ -15,7 +9,11 @@ setup(
     cmdclass=versioneer.get_cmdclass(),
     packages=find_packages(exclude=["tests"]),
     include_package_data=True,
-    install_requires=install_requirements,
+    install_requires=[
+        "click==6.7",
+        "requests==2.18.4",
+        "scout.py==0.1.3"
+    ],
     entry_points="""
         [console_scripts]
         kubernaut=kubernaut.cli:cli
