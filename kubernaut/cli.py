@@ -52,25 +52,17 @@ CLAIM_LIMITATION_MSGS = [
 config_root = Path.home() / ".config" / PROGRAM_NAME
 config_root.mkdir(parents=True, exist_ok=True)
 config_file = config_root / 'config.json'
-id_file = config_root / 'id'
 
 with config_file.open('a+') as f:
     f.seek(0)
     data = f.read() or '{}'
     config = json.loads(data)
 
-try:
-    with id_file.open('x') as f:
-        install_id = str(uuid4())
-        f.write(install_id)
-except FileExistsError:
-    with id_file.open('r') as f:
-        install_id = f.read()
-
 kubeconfig_root = Path.home() / ".kube"
 kubeconfig_root.mkdir(exist_ok=True)
 
-scout = Scout(PROGRAM_NAME, __version__, install_id)
+scout = Scout(PROGRAM_NAME, __version__)
+scout_resp = scout.report()
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Utility Functions
@@ -125,9 +117,7 @@ def common_options(func):
 def create_version_message():
     msg = "%(prog)s v%(version)s"
 
-    resp = scout.report()
-
-    latest_version = resp.get('latest_version', __version__)
+    latest_version = scout_resp.get('latest_version', __version__)
     if latest_version != __version__:
         msg += "\n\n" + VERSION_OUTDATED_MSG.format(latest_version)
 

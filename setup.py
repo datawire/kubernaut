@@ -12,7 +12,7 @@ setup(
     install_requires=[
         "click==6.7",
         "requests==2.18.4",
-        "scout.py==0.1.3"
+        "scout.py==0.1.5"
     ],
     entry_points="""
         [console_scripts]
