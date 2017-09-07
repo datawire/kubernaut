@@ -19,7 +19,7 @@ PROJECT=kubernaut
 # Set to the setuptools entrypoint for your binary
 ENTRYPOINT=kubernaut.cli:cli
 # Set to where you would like to save the pex binary
-OUTPUT=dist/kubernaut
+OUTPUT=out/kubernaut
 
 # END REQUIRED_CUSTOMIZATION
 
@@ -60,5 +60,4 @@ pex --no-pypi \
     --platform linux_i686 \
     --platform macosx_10_11_x86_64
 
-#pex --no-pypi -f "${WHL_DIR}" -r requirements.txt "${PROJECT}" -e "${ENTRYPOINT}" -o "${OUTPUT}" --disable-cache --platform linux_x86_64 --platform linux_i686 --platform macosx_10_11_x86_64
 echo "Created ${OUTPUT}"
