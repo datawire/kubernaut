@@ -56,7 +56,7 @@ pex --no-pypi \
     -f "${WHL_DIR}" \
     -e "${ENTRYPOINT}" \
     -o "${OUTPUT}" \
-    --python-shebang=/usr/bin/env python3 \
+    "--python-shebang=/usr/bin/env python3" \
     --platform linux_x86_64 \
     --platform linux_i686 \
     --platform macosx_10_11_x86_64
