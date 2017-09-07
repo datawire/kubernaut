@@ -11,7 +11,7 @@ setup(
     include_package_data=True,
     install_requires=[
         "click==6.7",
-        "requests==2.18.4",
+        "requests==2.14.2",
         "scout.py==0.1.5"
     ],
     entry_points="""

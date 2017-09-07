@@ -10,3 +10,4 @@ virtualenv
 # --- Packaging ---
 packaging/homebrew_rsa
 out
+dist
