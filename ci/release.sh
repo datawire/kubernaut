@@ -51,3 +51,8 @@ aws s3api put-object \
     --bucket scout-datawire-io \
     --key kubernaut/app.json \
     --body app.json
+
+aws s3api put-object \
+    --bucket datawire-static-files \
+    --key kubernaut/kubernaut \
+    --body dist/kubernaut
