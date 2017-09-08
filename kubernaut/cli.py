@@ -9,7 +9,7 @@ from uuid import uuid4
 from . import __version__
 from scout import Scout
 
-from pathlib import Path
+from pathlib2 import Path
 from os import getenv
 from sys import exit
 
