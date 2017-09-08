@@ -20,7 +20,7 @@ There are three installation paths for Kubernaut:
 ## HTTP Download
 
 ```bash
-$ curl -LO https://s3.amazonaws.com/datawire-static-files/kubernaut/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/kubernaut
+$ curl -LO https://s3.amazonaws.com/datawire-static-files/kubernaut/$(curl -s https://s3.amazonaws.com/datawire-static-files/kubernaut/stable.txt)/kubernaut
 $ chmod +x ./kubernaut
 $ sudo -s mv kubernaut /usr/local/bin/kubernaut
 ```
