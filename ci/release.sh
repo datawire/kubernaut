@@ -56,7 +56,7 @@ aws s3api put-object \
 
 aws s3api put-object \
     --bucket datawire-static-files \
-    --key kubernaut/kubernaut-${KUBERNAUT_VERSION} \
+    --key kubernaut/${KUBERNAUT_VERSION}/kubernaut \
     --body out/kubernaut
 
 aws s3api put-object \
