@@ -52,7 +52,7 @@ CLAIM_LIMITATION_MSGS = [
 def home():
     # pathlib.Path.home() seems to mysteriously and intermittently not
     # exist in some environments (e.g. travis)
-    return os.path.expanduser("~")
+    return pathlib.Path(os.path.expanduser("~"))
 
 config_root = home() / ".config" / PROGRAM_NAME
 config_root.mkdir(parents=True, exist_ok=True)
