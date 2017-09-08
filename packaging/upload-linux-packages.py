@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
-from pathlib2 import Path
+from pathlib import Path
 from subprocess import run
 
 PACKAGES = Path(__file__).absolute().parent / "out"
