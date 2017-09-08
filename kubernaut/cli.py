@@ -4,6 +4,7 @@ import click
 import json
 import functools
 import os.path
+import pathlib
 import platform
 import requests
 from uuid import uuid4
