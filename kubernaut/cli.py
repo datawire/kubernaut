@@ -3,14 +3,13 @@
 import click
 import json
 import functools
-import os.path
-import pathlib
 import platform
 import requests
 from uuid import uuid4
 from . import __version__
 from scout import Scout
 
+from pathlib2 import Path
 from os import getenv
 from sys import exit
 
@@ -50,12 +49,7 @@ CLAIM_LIMITATION_MSGS = [
 # Configuration
 # ----------------------------------------------------------------------------------------------------------------------
 
-def home():
-    # pathlib.Path.home() seems to mysteriously and intermittently not
-    # exist in some environments (e.g. travis)
-    return pathlib.Path(os.path.expanduser("~"))
-
-config_root = home() / ".config" / PROGRAM_NAME
+config_root = Path.home() / ".config" / PROGRAM_NAME
 config_root.mkdir(parents=True, exist_ok=True)
 config_file = config_root / 'config.json'
 
@@ -64,7 +58,7 @@ with config_file.open('a+') as f:
     data = f.read() or '{}'
     config = json.loads(data)
 
-kubeconfig_root = home() / ".kube"
+kubeconfig_root = Path.home() / ".kube"
 kubeconfig_root.mkdir(exist_ok=True)
 
 scout = Scout(PROGRAM_NAME, __version__)

@@ -10,7 +10,7 @@ create-linux-packages.py <release-version>
 import sys
 from shutil import rmtree
 from subprocess import run
-from pathlib import Path
+from pathlib2 import Path
 
 THIS_DIRECTORY = Path(__file__).absolute().parent
 
