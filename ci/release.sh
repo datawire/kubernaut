@@ -46,6 +46,8 @@ cat << EOF > app.json
 }
 EOF
 
+printf "${KUBERNAUT_VERSION}" > out/stable.txt
+
 export AWS_DEFAULT_REGION=us-east-1
 aws s3api put-object \
     --bucket scout-datawire-io \
@@ -54,5 +56,10 @@ aws s3api put-object \
 
 aws s3api put-object \
     --bucket datawire-static-files \
-    --key kubernaut/kubernaut \
+    --key kubernaut/kubernaut-${KUBERNAUT_VERSION} \
     --body out/kubernaut
+
+aws s3api put-object \
+    --bucket datawire-static-files \
+    --key kubernaut/stable.txt \
+    --body out/stable.txt
