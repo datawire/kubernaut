@@ -12,7 +12,8 @@ setup(
     install_requires=[
         "click==6.7",
         "requests==2.18.4",
-        "scout.py==0.1.5"
+        "scout.py==0.1.5",
+        "pathlib2==2.3.0"
     ],
     entry_points="""
         [console_scripts]
