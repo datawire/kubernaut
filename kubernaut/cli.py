@@ -4,8 +4,8 @@ import click
 import json
 import functools
 import platform
+import os
 import requests
-from uuid import uuid4
 from . import __version__
 from scout import Scout
 
@@ -67,6 +67,31 @@ scout_resp = scout.report()
 # ----------------------------------------------------------------------------------------------------------------------
 # Utility Functions
 # ----------------------------------------------------------------------------------------------------------------------
+
+
+def create_kubeconfig_var_message(path):
+    msg = """Set your KUBECONFIG environment variable to use kubectl"""
+
+    shell = os.getenv("SHELL").lower()
+    if "/bash" in shell or "/zsh" in shell:
+        msg += """
+        
+        export KUBECONFIG={0}
+        """
+    elif "/fish" in shell:
+        msg += """ 
+        
+        set -g -x KUBECONFIG {0}
+        """
+    else:
+        msg += ". Unable to detect shell therefore assuming a Bash-compatible shell"
+
+        msg += """    
+        
+        export KUBECONFIG={0}
+        """
+
+    return msg.format(path).lstrip()
 
 
 def save_config(config_data):
@@ -148,8 +173,8 @@ def cli_claim(server):
 
         with (kubeconfig_root / PROGRAM_NAME).open("w+") as f:
             f.write(resp.text)
-            click.echo(
-                "Wrote kubernetes config to {}".format((kubeconfig_root / "kubernaut")))
+            click.echo("Wrote kubernetes config to {}\n".format((kubeconfig_root / PROGRAM_NAME)))
+            click.echo(create_kubeconfig_var_message(str(kubeconfig_root / PROGRAM_NAME)))
 
 
 @cli.command("kubeconfig", help="Get a clusters kubeconfig")
@@ -171,7 +196,8 @@ def cli_get_kubeconfig(server, path_only):
             if path_only:
                 click.echo(path)
             else:
-                click.echo("Wrote kubernetes config to {}".format((kubeconfig_root / PROGRAM_NAME)))
+                click.echo("Wrote kubernetes config to {}\n".format((kubeconfig_root / PROGRAM_NAME)))
+                click.echo(create_kubeconfig_var_message(str(kubeconfig_root / PROGRAM_NAME)))
 
 
 @cli.command("discard", help="Discard a previously claimed Kubernetes cluster")
