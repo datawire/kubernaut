@@ -72,7 +72,7 @@ scout_resp = scout.report()
 def create_kubeconfig_var_message(path):
     msg = """Set your KUBECONFIG environment variable to use kubectl"""
 
-    shell = os.getenv("SHELL").lower()
+    shell = os.getenv("SHELL", "").lower()
     if "/bash" in shell or "/zsh" in shell:
         msg += """
         
