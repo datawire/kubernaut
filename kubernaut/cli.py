@@ -43,6 +43,7 @@ USER_AGENT = "{0}/{1} ({2}; {3})".format(PROGRAM_NAME, __version__, platform.sys
 
 CLAIM_LIMITATION_MSGS = [
     click.style("Warning: ", fg="yellow", bold=True) + click.style("Kubernaut does not currently support LoadBalancer services!")
+    click.style("To start using Kubernaut, export KUBECONFIG=${HOME}/.kube/kubernaut in your shell.")
 ]
 
 # ----------------------------------------------------------------------------------------------------------------------
