@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+import sys
+
 import click
 import json
 import functools
@@ -183,13 +185,21 @@ def cli_claim(server):
     help='Only print the path after the command exits',
     is_flag=True
 )
+@click.option(
+    '-q', '--query-only',
+    help="Print nothing on success, just set the exit code to indicate if a cluster is claimed",
+    is_flag=True
+)
 @common_options
-def cli_get_kubeconfig(server, path_only):
+def cli_get_kubeconfig(server, path_only, query_only):
     url = '{}/cluster'.format(server)
     resp = requests.get(url, headers=create_headers(server))
 
     handle_response(resp)
     if resp.status_code == 200:
+        if query_only:
+            sys.exit(0)
+
         path = kubeconfig_root / PROGRAM_NAME
         with path.open("w+") as kf:
             kf.write(resp.text)
@@ -198,6 +208,8 @@ def cli_get_kubeconfig(server, path_only):
             else:
                 click.echo("Wrote kubernetes config to {}\n".format((kubeconfig_root / PROGRAM_NAME)))
                 click.echo(create_kubeconfig_var_message(str(kubeconfig_root / PROGRAM_NAME)))
+    else:
+        sys.exit(1)
 
 
 @cli.command("discard", help="Discard a previously claimed Kubernetes cluster")
