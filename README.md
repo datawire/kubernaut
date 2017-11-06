@@ -99,6 +99,10 @@ Commands:
   set-token   Set a token to use the Kubernaut service
 ```
 
+## Note on Discard
+
+Discard is idemptotent. It succeeds regardless of whether there is an active claim or not.
+
 # Upgrades
 
 ## macOS
