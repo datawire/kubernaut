@@ -53,7 +53,7 @@ config_root = Path.home() / ".config" / PROGRAM_NAME
 config_root.mkdir(parents=True, exist_ok=True)
 config_file = config_root / 'config.json'
 
-with config_file.open('a+') as f:
+with config_file.open('ab+') as f:
     f.seek(0)
     data = f.read() or '{}'
     config = json.loads(data)
@@ -75,7 +75,7 @@ def create_kubeconfig_var_message(path):
     shell = os.getenv("SHELL", "").lower()
     if "/bash" in shell or "/zsh" in shell:
         msg += """
-        
+        token
         export KUBECONFIG={0}
         """
     elif "/fish" in shell:
@@ -95,7 +95,7 @@ def create_kubeconfig_var_message(path):
 
 
 def save_config(config_data):
-    with config_file.open('w+') as cf:
+    with config_file.open('wb+') as cf:
         json.dump(config_data, cf, indent=2)
 
 
@@ -217,5 +217,5 @@ def cli_get_token():
 @click.argument("token")
 @common_options
 def cli_set_token(server, token):
-    config[server.split("://")[1]] = {"token": token}
+    config[server.split("://")[1]] = {u"token": token}
     save_config(config)
