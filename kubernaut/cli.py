@@ -55,7 +55,7 @@ config_file = config_root / 'config.json'
 
 with config_file.open('ab+') as f:
     f.seek(0)
-    data = f.read() or '{}'
+    data = f.read().decode() or '{}'
     config = json.loads(data)
 
 kubeconfig_root = Path.home() / ".kube"
