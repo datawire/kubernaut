@@ -34,10 +34,11 @@ install:
 script:
   - export KUBERNAUT_VERSION=$(make version)
   - make build
-  - rm ~/.config/kubernaut/config.json
-  - ./virtualenv/bin/kubernaut --version
-  - cat "{}" > ~/.config/kubernaut/config.json
-  - ./virtualenv/bin/kubernaut --version
+  - virtualenv/bin/pip install .
+  - rm -f ~/.config/kubernaut/config.json
+  - virtualenv/bin/kubernaut --version
+  - echo "{}" > ~/.config/kubernaut/config.json
+  - virtualenv/bin/kubernaut --version
 
 deploy:
   provider: script
