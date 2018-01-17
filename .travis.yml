@@ -34,7 +34,7 @@ install:
 
 script:
   - export KUBERNAUT_VERSION=$(make version)
-  - tox -e $(echo py$TRAVIS_PYTHON_VERSION | tr -d .)
+  - tox
   - virtualenv/bin/pip install .
   - rm -f ~/.config/kubernaut/config.json
   - virtualenv/bin/kubernaut --version
