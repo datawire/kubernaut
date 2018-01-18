@@ -1,7 +1,9 @@
 ---
 language: python
 python:
+  - "2.7"
   - "3.5"
+  - "3.6"
 
 env:
   global:
@@ -32,7 +34,12 @@ install:
 
 script:
   - export KUBERNAUT_VERSION=$(make version)
-  - make build
+  - tox
+  - virtualenv/bin/pip install .
+  - rm -f ~/.config/kubernaut/config.json
+  - virtualenv/bin/kubernaut --version
+  - echo "{}" > ~/.config/kubernaut/config.json
+  - virtualenv/bin/kubernaut --version
 
 deploy:
   provider: script
