@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import click
+import codecs
 import json
 import functools
 import platform
@@ -95,8 +96,8 @@ def create_kubeconfig_var_message(path):
 
 
 def save_config(config_data):
-    with config_file.open('w+', encoding="utf8") as cf:
-        json.dump(config_data, cf, indent=2)
+    with config_file.open('wb+') as cf:
+        json.dump(config_data, codecs.getwriter('utf-8')(cf), ensure_ascii=False, indent=2)
 
 
 def get_jwt(server):
