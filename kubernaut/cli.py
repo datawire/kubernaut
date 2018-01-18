@@ -53,9 +53,9 @@ config_root = Path.home() / ".config" / PROGRAM_NAME
 config_root.mkdir(parents=True, exist_ok=True)
 config_file = config_root / 'config.json'
 
-with config_file.open('ab+') as f:
+with config_file.open('a+', encoding='utf-8') as f:
     f.seek(0)
-    data = f.read().decode() or '{}'
+    data = f.read() or '{}'
     config = json.loads(data)
 
 kubeconfig_root = Path.home() / ".kube"
@@ -95,7 +95,7 @@ def create_kubeconfig_var_message(path):
 
 
 def save_config(config_data):
-    with config_file.open('wb+') as cf:
+    with config_file.open('w+', encoding="utf8") as cf:
         json.dump(config_data, cf, indent=2)
 
 

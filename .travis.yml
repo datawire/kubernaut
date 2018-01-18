@@ -37,6 +37,7 @@ script:
   - tox
   - virtualenv/bin/pip install .
   - rm -f ~/.config/kubernaut/config.json
+  - virtualenv/bin/kubernaut set-token foobar
   - virtualenv/bin/kubernaut --version
   - echo "{}" > ~/.config/kubernaut/config.json
   - virtualenv/bin/kubernaut --version
