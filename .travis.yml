@@ -46,6 +46,8 @@ deploy:
   provider: script
   skip_cleanup: true
   script: ci/release.sh
+  python:
+    - "3.6"
   on:
     tags: true
     branch: master

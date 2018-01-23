@@ -19,7 +19,7 @@ ssh-add packaging/homebrew_rsa
 gem install package_cloud
 
 # Run the release:
-make release
+#make release
 
 cat << EOF > ~/.pypirc
 [distutils]

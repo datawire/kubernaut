@@ -25,29 +25,6 @@ $ chmod +x ./kubernaut
 $ sudo -s mv kubernaut /usr/local/bin/kubernaut
 ```
 
-## macOS
-
-Kubernaut is in early development and we have not finished the macOS installation process. [Issue #3 (GH-3)](../../issues/3) exists to track progress. In the meantime the recommended way to install Kubernaut on macOS is via `pip`.
-
-```bash
-$ brew install python3
-$ pip3 install kubernaut
-```
-
-## Fedora 25 or later
-
-```bash
-$ curl -s https://packagecloud.io/install/repositories/datawireio/stable/script.rpm.sh | sudo bash
-$ sudo dnf install kubernaut
-```
-
-## Ubuntu 16.04 or later
-
-```bash
-$ curl -s https://packagecloud.io/install/repositories/datawireio/stable/script.deb.sh | sudo bash
-$ sudo apt install kubernaut
-```
-
 ## Python Pip Install
 
 ```bash
@@ -105,22 +82,10 @@ Discard is idemptotent. It succeeds regardless of whether there is an active cla
 
 # Upgrades
 
-## macOS
+Download the binary via curl or use pip to upgrade.
 
 ```bash
 $ pip3 install -U kubernaut
-```
-
-## Fedora 25 or later
-
-```bash
-$ sudo dnf upgrade kubernaut
-```
-
-## Ubuntu 16.04 or later
-
-```bash
-$ sudo apt-get update && apt-get install kubernaut
 ```
 
 # Examples
