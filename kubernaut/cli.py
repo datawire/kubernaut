@@ -76,7 +76,7 @@ def create_kubeconfig_var_message(path):
     shell = os.getenv("SHELL", "").lower()
     if "/bash" in shell or "/zsh" in shell:
         msg += """
-        token
+
         export KUBECONFIG={0}
         """
     elif "/fish" in shell:
