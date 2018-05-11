@@ -117,7 +117,8 @@ def create_headers(server):
 
 
 def handle_response(resp):
-    failed = False
+    failed = ((resp.status_code // 100) != 2)
+
     if resp.status_code == 400:
         click.echo(resp.json()["description"])
     elif resp.status_code == 401:
@@ -126,6 +127,8 @@ def handle_response(resp):
         click.echo("Kubernetes cluster not found... have you claimed one? Please run `kubernaut claim`")
     elif resp.status_code == 500:
         click.echo("The kubernaut.io service is experiencing a temporary issue. Please try again later.")
+    elif failed:
+        click.echo("The kubernaut.io service is experiencing a temporary issue (%d). Please try again later." % resp.status_code)
 
     if failed:
         exit(1)
