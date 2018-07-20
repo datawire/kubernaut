@@ -8,4 +8,3 @@ def require(value: T) -> T:
         return None
     else:
         return value
-

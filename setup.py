@@ -6,12 +6,7 @@ setup(
     version="v1alpha2",
     packages=find_packages(exclude=["tests"]),
     include_package_data=True,
-    install_requires=[
-        "click==6.7",
-        "requests==2.18.4",
-        "scout.py==0.1.5",
-        "pathlib2==2.3.0"
-    ],
+    install_requires=[],
     entry_points="""
         [console_scripts]
         kubernaut=kubernaut.cli:cli

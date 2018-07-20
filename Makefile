@@ -1,1 +1,4 @@
-test:
+# Makefile
+
+dev:
+	pipenv install -e .

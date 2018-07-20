@@ -1,14 +1,21 @@
 import click
-from kubernaut.create.cmd import entrypoint as create_entrypoint
 
 
-@click.version_option(prog_name="kubernaut")
+from kubernaut.create.cmd import create
+from kubernaut.delete.cmd import delete
+from kubernaut.config.cmd import config
+
+
 @click.group()
+@click.version_option()
 @click.option("--backend-url", type=str)
-def cli(ctx, backend_url):
-    click.echo("main!")
+def cli(backend_url: str):
+    pass
 
+
+cli.add_command(config)
+cli.add_command(create)
+cli.add_command(delete)
 
 if __name__ == "__main__":
-    cli.add_command(create_entrypoint)
     cli()

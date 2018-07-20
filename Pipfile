@@ -7,6 +7,7 @@ name = "pypi"
 click = "*"
 requests = "*"
 "e1839a8" = {path = ".", editable = true}
+kubernaut = {editable = true, path = "."}
 
 [dev-packages]
 mypy = "*"
