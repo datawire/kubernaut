@@ -7,9 +7,10 @@ from kubernaut.config.model import Config
 from typing import Optional
 
 
-@click.group()
-def config():
-    pass
+@click.group(
+    help="Configure the kubernaut CLI"
+)
+def config(): pass
 
 
 @config.command(name="add-backend")

@@ -65,10 +65,10 @@ class Backend:
 
         return RawBackendResponse(resp.status_code, dict(resp.headers), resp.text)
 
-    def delete_claim(self, name: str) -> RawBackendResponse:
+    def delete_claim(self, name: str, all_claims: bool = False) -> RawBackendResponse:
         headers = self.__init_headers()
-        resp = requests.delete(url=self.__fmt_url("/claims/{}".format(name)),
-                               headers=headers)
+        path = "/claims" if all_claims else "/claims/{}".format(name)
+        resp = requests.delete(url=self.__fmt_url(path), headers=headers)
 
         return RawBackendResponse(resp.status_code, dict(resp.headers), resp.text)
 
@@ -86,10 +86,10 @@ class Backend:
     # ==========================================================================
 
     def __fmt_url(self, resource):
-        return "{0}/{1}".format(self.backend_url, resource)
+        return "{0}/{1}".format(self.url, resource)
 
     def __init_headers(self) -> Dict[str, str]:
         return {
-            "authorization": "Bearer {0}".format(self.backend_key),
+            "authorization": "Bearer {0}".format(self.key),
             "user-agent": "kubernaut/{0}".format("v1alpha2")
         }

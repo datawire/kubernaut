@@ -1,7 +1,9 @@
 import click
 
 
-@click.group()
+@click.group(
+    help="Create Kubernaut resources such as claims"
+)
 def create():
     pass
 
