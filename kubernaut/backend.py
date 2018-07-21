@@ -1,12 +1,12 @@
 import requests
 
 from kubernaut.util import require
-from typing import Dict
+from typing import Dict, Optional
 
 
 class RawBackendResponse:
 
-    def __init__(self, status_code: int, headers: Dict[str, str] = None, content: str = None):
+    def __init__(self, status_code: int, headers: Dict[str, str], content: str = None) -> None:
         self.status_code = require(status_code)
         self.headers = headers or {}
         self.content = content
@@ -14,9 +14,13 @@ class RawBackendResponse:
 
 class Backend:
 
-    def __init__(self, backend_url, backend_key, **kwargs):
-        self.backend_url = require(backend_url)
-        self.backend_key = require(backend_key)
+    def __init__(self, url, key, name: Optional[str]) -> None:
+        self.url = url
+        self.key = key
+        self.name = name or self.url
+
+    def __str__(self) -> str:
+        return "Backend(url={}, name={})".format(self.url, self.name)
 
     # ==========================================================================
     # Low-level HTTP cluster-groups API
@@ -29,16 +33,16 @@ class Backend:
         resp = requests.get(url=self.__fmt_url("/cluster-groups"),
                             headers=headers)
 
-        return RawBackendResponse(resp.status_code, resp.headers, resp.text)
+        return RawBackendResponse(resp.status_code, dict(resp.headers), resp.text)
 
     def describe_cluster_group(self, name: str) -> RawBackendResponse:
         headers = self.__init_headers()
         headers["content-type"] = "application/json"
 
-        resp = requests.get(url=self.__fmt_url("/cluster-groups/{}".format(name)),
+        resp = requests.get(url=self.__fmt_url("/cluster-groups/{0}".format(name)),
                             headers=headers)
 
-        return RawBackendResponse(resp.status_code, resp.headers, resp.text)
+        return RawBackendResponse(resp.status_code, dict(resp.headers), resp.text)
 
     # ==========================================================================
     # Low-level HTTP claims API
@@ -52,21 +56,21 @@ class Backend:
                              headers=headers,
                              json=json_payload)
 
-        return RawBackendResponse(resp.status_code, resp.headers, resp.text)
+        return RawBackendResponse(resp.status_code, dict(resp.headers), resp.text)
 
     def describe_claim(self, name) -> RawBackendResponse:
         headers = self.__init_headers()
         resp = requests.get(url=self.__fmt_url("/claims/{}".format(name)),
                             headers=headers)
 
-        return RawBackendResponse(resp.status_code, resp.headers, resp.text)
+        return RawBackendResponse(resp.status_code, dict(resp.headers), resp.text)
 
     def delete_claim(self, name: str) -> RawBackendResponse:
         headers = self.__init_headers()
         resp = requests.delete(url=self.__fmt_url("/claims/{}".format(name)),
                                headers=headers)
 
-        return RawBackendResponse(resp.status_code, resp.headers, resp.text)
+        return RawBackendResponse(resp.status_code, dict(resp.headers), resp.text)
 
     def list_claims(self):
         headers = self.__init_headers()
@@ -75,7 +79,7 @@ class Backend:
         resp = requests.get(url=self.__fmt_url("/claims"),
                             headers=headers)
 
-        return RawBackendResponse(resp.status_code, resp.headers, resp.text)
+        return RawBackendResponse(resp.status_code, dict(resp.headers), resp.text)
 
     # ==========================================================================
     # Internals

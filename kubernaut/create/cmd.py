@@ -7,6 +7,9 @@ def create():
 
 
 @create.command("claim")
-def create_claim():
+@click.pass_context
+def create_claim(ctx):
+    config = ctx.obj
+
     click.echo("CREATE CLAIM!")
 

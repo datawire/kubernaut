@@ -8,6 +8,8 @@ click = "*"
 requests = "*"
 "e1839a8" = {path = ".", editable = true}
 kubernaut = {editable = true, path = "."}
+"ruamel.yaml" = "*"
+colorama = "*"
 
 [dev-packages]
 mypy = "*"
