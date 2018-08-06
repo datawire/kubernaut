@@ -1,5 +1,6 @@
 import json
 from ruamel.yaml import StringIO, YAML
+from typing import Optional
 
 
 class ClaimSpec:
@@ -39,3 +40,20 @@ class Claim:
     def __init__(self, name: str, kubeconfig: str) -> None:
         self.name = name
         self.kubeconfig = kubeconfig
+
+    @classmethod
+    def from_json(cls, json_string: str) -> 'Claim':
+        data = json.loads(json_string)
+        return Claim(data["name"], data["kubeconfig"])
+
+
+class ClusterGroup:
+
+    def __init__(self, name: str, description: Optional[str] = None) -> None:
+        self.name = name
+        self.description = description
+
+    @classmethod
+    def from_json(cls, json_string: str) -> 'ClusterGroup':
+        data = json.loads(json_string)
+        return ClusterGroup(data["name"], data.get("description"))

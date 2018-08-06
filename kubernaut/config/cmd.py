@@ -1,66 +1,98 @@
 import click
 
-from kubernaut import Context
+from kubernaut.util import *
+from kubernaut import KubernautContext
 from kubernaut.backend import Backend
-from kubernaut.config.model import Config
 
 from typing import Optional
 
 
-@click.group(
-    help="Configure the kubernaut CLI"
-)
+@click.group(help="Configure your Kubernaut CLI")
 def config(): pass
 
 
-@config.command(name="add-backend")
+@config.group(help="Configure the kubernaut backend")
+def backend(): pass
+
+
+@backend.command(
+    name="create",
+    help="Create a new backend configuration",
+)
 @click.argument("key")
 @click.option(
     "--url",
     type=str,
-    default="https://kubernaut.io"
+    default="https://kubernaut.io",
+    help="The URL of the backend service"
 )
 @click.option(
-    "--current",
+    "--activate",
     default=False,
     type=bool,
+    is_flag=True,
+    help="Set the new backend as the current active backend"
 )
 @click.option(
     "--name",
-    type=str
+    type=str,
+    help="Assign a friendly name to the backend"
 )
 @click.pass_obj
-def add_backend(obj: Context, key: str, url: str, current: bool, name: Optional[str]) -> None:
-    conf: Config = obj.config
-    backend = Backend(url, key, name)
-    conf.add_backend(backend)
+def create_backend(obj: KubernautContext, key: str, url: str, activate: bool, name: Optional[str]) -> None:
+    be = Backend(url, key, name)
+    obj.config.add_backend(be)
 
-    if current or conf.current_backend is None:
-        conf.set_current_backend(backend.name)
+    if activate or obj.config.current_backend is None:
+        obj.config.current_backend = be.name
 
-    conf.save()
+    obj.config.save()
 
 
-@config.command(name="remove-backend")
+@backend.command(
+    name="delete",
+    help="Delete an existing backend configuration"
+)
 @click.argument("name_url", type=str)
 @click.pass_obj
 def remove_backend(obj, name_url: str) -> None:
-    conf: Config = obj.config
-    conf.remove_backend(name_url)
-    conf.save()
+    obj.config.remove_backend(name_url)
+    obj.config.save()
 
 
-@config.command(name="view-backend")
+@backend.command(
+    name="list",
+    help="List all known backends"
+)
 @click.pass_obj
-def get_backend(obj):
-    backend = obj.config.current_backend
+def list_backends(obj: KubernautContext):
+    for be in obj.config.backends:
+        click.echo(_fmt_backend(be))
 
-    result = "Backend: "
-    if backend:
-        result += backend.url
-        if backend.url != backend.name:
-            result += (' "' + backend.name + '"')
+
+@backend.command(name="describe", help="Show information about a single backend configuration")
+@click.option(
+    "--name",
+    type=str,
+    help="Describe a specific backend"
+)
+@click.pass_obj
+def describe_backend(obj: KubernautContext, name: Optional[str] = None):
+    _backend = obj.get_backend(name=name, fail_if_missing=False)
+
+    if _backend:
+        result = _fmt_backend(_backend)
     else:
-        result += "None configured"
+        result = strip_margin("""
+        | No backend is configured.
+        """)
 
     click.echo(result)
+
+
+def _fmt_backend(be: Backend) -> str:
+    result = "Backend: " + be.url
+    if be.url != be.name:
+        result += (' "' + be.name + '"')
+
+    return result

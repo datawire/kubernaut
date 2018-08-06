@@ -1,20 +1,22 @@
 import click
 
+from kubernaut import KubernautContext
 from kubernaut.util import *
 from kubernaut.model import *
 from kubernaut.backend import Backend
 from pathlib import Path
+from typing import Tuple
 
 
 @click.group(
-    help="Create Kubernaut resources such as claims"
+    help="Manage Kubernetes cluster claims"
 )
-def create():
+def claims():
     pass
 
 
-@create.command(
-    "claim",
+@claims.command(
+    "create",
     help=strip_margin("""
     | Create a claim
     |
@@ -59,13 +61,56 @@ def create_claim(obj, filename, name: Optional[str], cluster_group: Optional[str
     (claim, err) = _create_claim(backend, spec)
 
 
+@claims.command(
+    "list",
+    help="List all your current claims"
+)
+@click.pass_obj
+def list_claims(obj: KubernautContext):
+    backend = obj.get_backend()
+    api_res = backend.get_many_claims()
+    print(api_res)
+
+    if api_res.is_success():
+        payload = api_res.json
+        for claim in payload.get("claims", []):
+            click.echo(claim["name"])
+    else:
+        click.echo("Error retrieving claims!")
+
+
+@claims.command(
+    "delete",
+    help="Delete one or more claims"
+)
+@click.argument("names", nargs=-1)
+@click.option(
+    "--all", 'all_claims',
+    default=False,
+    help="Delete ALL of your claims",
+    is_flag=True
+)
+@click.pass_obj
+def delete_claim(obj, names: Tuple[str], all_claims: bool):
+    backend = obj.config.current_backend
+
+    results = {}
+
+    if all_claims:
+        result = backend.delete_claim(name=None, all_claims=True)
+    else:
+        for name in set(names):
+            result = backend.delete_claim(name)
+            results[name] = result
+
+
 def create_final_spec(spec: Optional[ClaimSpec], overrides: Dict[str, Any]) -> ClaimSpec:
     spec = spec if spec else ClaimSpec("", "")
 
     if overrides.get("name", None):
         spec.name = overrides["name"]
     elif not spec.name:
-        spec.name = generate_claim_name()
+        spec.name = random_name()
 
     if overrides.get("cluster_group", None):
         spec.cluster_group = overrides["cluster_group"]
@@ -82,46 +127,3 @@ def _create_claim(backend: Backend, spec: ClaimSpec) -> Optional[Claim]:
         return Claim(api_result.json["name"], api_result.json["kubeconfig"])
     else:
         return None
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

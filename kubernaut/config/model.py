@@ -11,12 +11,32 @@ _yaml = YAML(typ="safe")
 class Config:
 
     def __init__(self, load_path: Path, current_backend: Optional[Backend], backends: List[Backend]) -> None:
-        self.load_path = require(load_path)
-        self.current_backend = current_backend
+        self._load_path = require(load_path)
+        self.active_backend_name = current_backend.name if current_backend else None
         self.backends = backends or []
 
     def check(self):
         pass
+
+    @property
+    def current_backend(self) -> Optional[Backend]:
+        return self.get_backend(self.active_backend_name)
+
+    @current_backend.setter
+    def current_backend(self, name: str):
+        backend = self.get_backend(name)
+        if backend is None:
+            raise ValueError("Backend not found: {}".format(name))
+
+        self.active_backend_name = backend.name
+
+    def get_backend(self, name) -> Optional[Backend]:
+        result = None
+        for be in self.backends:
+            if be.name == name:
+                result = be
+
+        return result
 
     def add_backend(self, new_backend: Backend) -> None:
         for existing in self.backends:
@@ -28,17 +48,9 @@ class Config:
     def remove_backend(self, name_or_url: str) -> None:
         for existing in self.backends:
             if existing.name == name_or_url:
+                if self.active_backend_name == name_or_url:
+                    self.active_backend_name = None
                 self.backends.remove(existing)
-                if self.current_backend.name == name_or_url:
-                    self.current_backend = None
-
-    def set_current_backend(self, new_backend: str):
-        for be in self.backends:
-            if be.name == new_backend:
-                self.current_backend = be
-                break
-        else:
-            raise ValueError("Backend not found: {}", new_backend)
 
     def save(self):
         current_be_name = None
@@ -52,7 +64,7 @@ class Config:
 
         string_stream = StringIO()
         _yaml.dump(data, stream=string_stream)
-        self.load_path.write_text(string_stream.getvalue(), encoding="utf-8")
+        self._load_path.write_text(string_stream.getvalue(), encoding="utf-8")
 
     @classmethod
     def load(cls, path: Path) -> 'Config':

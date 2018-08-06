@@ -1,14 +1,22 @@
 import json
 import requests
 
-from kubernaut.util import require
 from typing import Dict, Optional
 
 
+def auto_str(cls):
+    def __str__(self):
+        return '%s(%s)' % (
+            type(self).__name__, ', '.join('%s=%s' % item for item in vars(self).items()))
+    cls.__str__ = __str__
+    return cls
+
+
+@auto_str
 class RawBackendResponse:
 
     def __init__(self, status_code: int, headers: Dict[str, str], content: str = None) -> None:
-        self.status_code = require(status_code)
+        self.status_code = status_code
         self.headers = headers or {}
         self.content = content
 
@@ -33,7 +41,7 @@ class Backend:
     # Low-level HTTP cluster-groups API
     # ==========================================================================
 
-    def list_cluster_groups(self) -> RawBackendResponse:
+    def get_many_cluster_groups(self) -> RawBackendResponse:
         headers = self.__init_headers()
         headers["content-type"] = "application/json"
 
@@ -65,7 +73,7 @@ class Backend:
 
         return RawBackendResponse(resp.status_code, dict(resp.headers), resp.text)
 
-    def describe_claim(self, name) -> RawBackendResponse:
+    def get_claim(self, name) -> RawBackendResponse:
         headers = self.__init_headers()
         resp = requests.get(url=self.__fmt_url("/claims/{}".format(name)),
                             headers=headers)
@@ -79,9 +87,11 @@ class Backend:
 
         return RawBackendResponse(resp.status_code, dict(resp.headers), resp.text)
 
-    def list_claims(self):
+    def get_many_claims(self):
         headers = self.__init_headers()
         headers["content-type"] = "application/json"
+
+        print(self.__fmt_url("/claims"))
 
         resp = requests.get(url=self.__fmt_url("/claims"),
                             headers=headers)
@@ -92,8 +102,8 @@ class Backend:
     # Internals
     # ==========================================================================
 
-    def __fmt_url(self, resource):
-        return "{0}/{1}".format(self.url, resource)
+    def __fmt_url(self, resource: Optional[str]) -> str:
+        return "{0}{1}".format(self.url.rstrip("/"), resource or "")
 
     def __init_headers(self) -> Dict[str, str]:
         return {

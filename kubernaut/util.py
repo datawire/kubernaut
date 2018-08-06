@@ -1,7 +1,8 @@
 import re
 
-from click import Option, UsageError
+from click import Option, UsageError, Context
 from typing import Any, Dict, Optional, TypeVar
+from kubernaut.backend import Backend
 
 import json
 import random
@@ -10,6 +11,21 @@ import string
 
 
 T = TypeVar('T')
+
+
+def get_current_backend(ctx: Context, fail_if_not_found: bool = True) -> Optional[Backend]:
+    config = ctx.obj
+
+    from pprint import pprint
+    pprint(config)
+
+    if config.current_backend is not None:
+        return config.current_backend
+    else:
+        if fail_if_not_found:
+            ctx.fail("No activated backend was found. Please activate a backend")
+        else:
+            return None
 
 
 def require(value: T) -> T:
@@ -28,7 +44,7 @@ def random_alphanum(length: int) -> str:
     return ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(length))
 
 
-def generate_claim_name(suffix_len: int = 8) -> str:
+def random_name(suffix_len: int = 8) -> str:
     data = json.loads(load_resource("names.json"))
     part1 = random.choice(data["adjectives"])
     part2 = random.choice(data["fruits"])

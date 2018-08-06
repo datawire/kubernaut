@@ -1,11 +1,11 @@
 import click
 import os.path
 
+from click import Context
 from kubernaut import *
-from kubernaut.create.cmd import create
-from kubernaut.delete.cmd import delete
 from kubernaut.config.cmd import config as config_cmd
-from kubernaut.get.cmd import get
+from kubernaut.claims.cmd import claims as claims_cmd
+from kubernaut.clustergroups.cmd import clustergroups
 from kubernaut.config.model import Config
 from pathlib import Path
 from typing import Optional
@@ -28,20 +28,20 @@ from typing import Optional
     type=click.Path()
 )
 @click.pass_context
-def cli(ctx, kubernaut_backend: Optional[str], kubernaut_config: str):
+def cli(ctx: Context, kubernaut_backend: Optional[str], kubernaut_config: str):
     config = Config.load(Path(kubernaut_config))
-    app_ctx = Context(config)
+    app_ctx = KubernautContext(config)
 
     if kubernaut_backend:
-        config.set_current_backend(kubernaut_backend)
+        config.current_backend = kubernaut_backend
 
     ctx.obj = app_ctx
 
 
 cli.add_command(config_cmd)
-cli.add_command(create)
-cli.add_command(delete)
-cli.add_command(get)
+cli.add_command(claims_cmd)
+cli.add_command(clustergroups)
+
 
 if __name__ == "__main__":
     cli()
