@@ -56,7 +56,7 @@ def create_claim(obj, filename, name: Optional[str], cluster_group: Optional[str
 
     spec = create_final_spec(spec, {"name": name, "cluster_group": cluster_group})
 
-    #(claim, err) = _create_claim(backend, spec)
+    (claim, err) = _create_claim(backend, spec)
 
 
 def create_final_spec(spec: Optional[ClaimSpec], overrides: Dict[str, Any]) -> ClaimSpec:
@@ -75,6 +75,53 @@ def create_final_spec(spec: Optional[ClaimSpec], overrides: Dict[str, Any]) -> C
     return spec
 
 
-def _create_claim(backend: Backend, spec: ClaimSpec) -> Claim:
-    result = backend.create_claim(spec.to_json())
-    return Claim(spec.name, "")
+def _create_claim(backend: Backend, spec: ClaimSpec) -> Optional[Claim]:
+    api_result = backend.create_claim(spec.to_json())
+
+    if api_result.is_success():
+        return Claim(api_result.json["name"], api_result.json["kubeconfig"])
+    else:
+        return None
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

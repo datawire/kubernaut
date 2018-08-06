@@ -1,3 +1,4 @@
+import json
 import requests
 
 from kubernaut.util import require
@@ -10,6 +11,12 @@ class RawBackendResponse:
         self.status_code = require(status_code)
         self.headers = headers or {}
         self.content = content
+
+        if "application/json" in headers.get("content-type", ""):
+            self.json = json.loads(self.content, encoding="utf-8")
+
+    def is_success(self):
+        return self.status_code // 100 == 2
 
 
 class Backend:
