@@ -132,4 +132,4 @@ Yes! Set an environment variable `SCOUT_DISABLE=1`.
 
 # License
 
-Licensed under Apache 2.0. Please read [LICENSE](LICENSE) for details.
+Licensed under Apache 2.0. Please read [LICENSE](../LICENSE) for details.
