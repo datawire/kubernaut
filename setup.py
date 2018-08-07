@@ -1,9 +1,10 @@
+import versioneer
+
 from setuptools import setup, find_packages
 
 
 setup(
     name="kubernaut",
-    version="v1alpha2",
     packages=find_packages(exclude=["tests"]),
     include_package_data=True,
     install_requires=[],
@@ -11,6 +12,8 @@ setup(
         [console_scripts]
         kubernaut=kubernaut.cli:cli
     """,
+    version=versioneer.get_version(),
+    cmdclass=versioneer.get_cmdclass(),
     author="datawire.io",
     author_email="dev@datawire.io",
     url="https://github.com/datawire/kubernaut",

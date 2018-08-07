@@ -1,7 +1,7 @@
 import click
 import os.path
 
-from click import Context
+from kubernaut import __version__
 from kubernaut import *
 from kubernaut.config.cmd import config as config_cmd
 from kubernaut.claims.cmd import claims as claims_cmd
@@ -28,6 +28,7 @@ from typing import Optional
     type=click.Path()
 )
 @click.pass_context
+@click.version_option(version=__version__, prog_name="kubernaut")
 def cli(ctx: Context, kubernaut_backend: Optional[str], kubernaut_config: str):
     config = Config.load(Path(kubernaut_config))
     app_ctx = KubernautContext(config)

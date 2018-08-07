@@ -20,14 +20,6 @@ clean:
 		ci-secrets.tar.gz
 	find -iname "*.pyc" -delete
 
-compile: SKIP_TESTS = false
-compile: DOCKER_WORKDIR = /work
-compile: DOCKER_ARGS += -e BINARY_NAME=$(BINARY_NAME)
-compile: DOCKER_ARGS += -e SKIP_TESTS=$(SKIP_TESTS)
-compile:
-	$(DOCKER_RUN) $(DOCKER_MOUNTDIR)/tools/build-docker.sh
-	cp build/out/$(BINARY_NAME) build/out/$(BINARY_BASENAME)
-
 dev:
 	pipenv install -e .
 
@@ -38,4 +30,4 @@ test: init
 	pipenv run py.test test
 
 binary: test
-	BINARY_NAME=$(BINARY_NAME) tools/build-local.sh
+	BINARY_NAME=$(BINARY_NAME) pipenv run tools/build-local.sh

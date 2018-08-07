@@ -11,3 +11,9 @@ virtualenv
 packaging/homebrew_rsa
 out
 dist
+build
+
+# --- Project ---
+.mypy_cache/
+.pytest_cache/
+*.spec

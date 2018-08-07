@@ -9,6 +9,10 @@ from kubernaut.backend import Backend
 from ruamel.yaml import YAML
 from typing import Optional
 
+from kubernaut._version import get_versions
+__version__ = get_versions()['version']
+del get_versions
+
 model_classes = inspect.getmembers(sys.modules["kubernaut.model"], inspect.isclass)
 
 yaml = YAML(typ='safe')
@@ -39,3 +43,4 @@ class KubernautContext:
             raise click.ClickException(msg)
         else:
             return result
+

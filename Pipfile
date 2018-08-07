@@ -10,6 +10,7 @@ requests = "*"
 kubernaut = {editable = true, path = "."}
 "ruamel.yaml" = "*"
 colorama = "*"
+versioneer = "*"
 
 [dev-packages]
 mypy = "*"
