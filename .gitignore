@@ -17,3 +17,4 @@ build
 .mypy_cache/
 .pytest_cache/
 *.spec
+datawireio-cloud-*.json
