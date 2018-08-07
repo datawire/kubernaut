@@ -22,33 +22,16 @@ services:
   - docker
 
 before_install:
-  - gem install package_cloud
-  - package_cloud version
-  - which package_cloud
-
-  - pip install tox-travis homebrew-pypi-poet awscli
-  - python --version
-  - python2 --version
   - python3 --version
 
-install:
-  - make virtualenv
-
 script:
-  - export KUBERNAUT_VERSION=$(make version)
-  - tox
-  - virtualenv/bin/pip install .
-  - rm -f ~/.config/kubernaut/config.json
-  - virtualenv/bin/kubernaut set-token foobar
-  - virtualenv/bin/kubernaut --version
-  - echo "{}" > ~/.config/kubernaut/config.json
-  - virtualenv/bin/kubernaut --version
+  - make binary
 
-deploy:
-  provider: script
-  skip_cleanup: true
-  script: ci/release.sh
-  on:
-    tags: true
-    branch: master
-    python: "3.6"
+#deploy:
+#  provider: script
+#  skip_cleanup: true
+#  script: ci/release.sh
+#  on:
+#    tags: true
+#    branch: master
+#    python: "3.6"
