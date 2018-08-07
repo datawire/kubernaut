@@ -37,7 +37,6 @@ dev:
 	pipenv install -e .
 
 init:
-	pip install --user pipenv
 	pipenv install --dev
 
 test: init

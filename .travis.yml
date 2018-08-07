@@ -25,6 +25,7 @@ before_install:
   - python3 --version
 
 install:
+  - pip install pipenv
   - make init
 
 script:
