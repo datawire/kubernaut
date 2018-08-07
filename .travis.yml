@@ -24,6 +24,9 @@ services:
 before_install:
   - python3 --version
 
+install:
+  - make init
+
 script:
   - make binary
 
