@@ -1,6 +1,8 @@
 import click
+import re
 
 from kubernaut import KubernautContext
+from kubernaut.kubeconfig import *
 from kubernaut.util import *
 from kubernaut.model import *
 from kubernaut.backend import Backend
@@ -58,7 +60,17 @@ def create_claim(obj, filename, name: Optional[str], cluster_group: Optional[str
 
     spec = create_final_spec(spec, {"name": name, "cluster_group": cluster_group})
 
-    (claim, err) = _create_claim(backend, spec)
+    pattern = '^[a-z][a-z0-9-_]*[a-z0-9]$'
+    if not re.search(pattern, spec.name, re.IGNORECASE | re.ASCII):
+        raise click.ClickException("Claim name does not match allowed pattern: '{}'".format(pattern))
+
+    claim = _create_claim(backend, spec)
+    if claim:
+        kubeconfig_path = Path.home() / ".kube" / "{}.yaml".format(spec.name)
+        write_kubeconfig(claim.kubeconfig, kubeconfig_path)
+        click.echo(kubeconfig_message(kubeconfig_path))
+    else:
+        raise click.ClickException("Unable to create claim!")
 
 
 @claims.command(
