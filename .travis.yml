@@ -31,7 +31,7 @@ before_install:
   - python --version
 
 install:
-  - curl https://storage.googleapis.com/pub/gsutil.tar.gz
+  - curl -OL https://storage.googleapis.com/pub/gsutil.tar.gz
   - tar xfz gsutil.tar.gz -C $HOME
   - export PATH=${PATH}:$HOME/gsutil
   - pip install pipenv
