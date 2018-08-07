@@ -5,8 +5,11 @@
 GIT_COMMIT=$(shell git rev-parse --short --verify HEAD)
 
 BINARY_BASENAME = kubernaut
-BINARY_PLATFORM = x86_64
-BINARY_NAME = $(BINARY_BASENAME)-$(GIT_COMMIT)-$(BINARY_OS)-$(BINARY_PLATFORM)
+BINARY_PLATFORM = amd64
+BINARY_NAME = $(BINARY_BASENAME)-$(BINARY_OS)-$(BINARY_PLATFORM)
+BINARY_NAME_VERSIONED = $(BINARY_BASENAME)-$(GIT_COMMIT)-$(BINARY_OS)-$(BINARY_PLATFORM)
+
+GCS_RELEASE_BUCKET_NAME = releases.datawire.io
 
 ifeq ($(OS),Windows_NT)
 	BINARY_OS = windows
@@ -29,9 +32,12 @@ clean:
 		.tox \
 		*.egg-info \
 		__pycache__ \
+		.mypy_cache \
 		.pytest_cache \
-		ci-secrets.tar.gz
+		ci-secrets.tar.gz \
+		kubernaut*.spec
 	find -iname "*.pyc" -delete
+	pipenv clean
 
 dev:
 	pipenv install -e .
@@ -39,8 +45,18 @@ dev:
 init:
 	pipenv install --dev
 
-test: init
+test: clean init
 	pipenv run py.test test
 
 binary: test
-	BINARY_NAME=$(BINARY_NAME) pipenv run tools/build-local.sh
+	pipenv run pyinstaller kubernaut/cli.py \
+	--distpath "build/out/$(GIT_COMMIT)/$(BINARY_OS)/$(BINARY_PLATFORM)" \
+	--name $(BINARY_BASENAME) \
+	--onefile \
+	--specpath "build/" \
+	--workpath "build/work"
+
+publish: binary
+	printf "$(GIT_COMMIT)" > build/latest.txt
+	gsutil cp -r build/out/*   gs://$(GCS_RELEASE_BUCKET_NAME)/$(BINARY_BASENAME)
+	gsutil cp build/latest.txt gs://$(GCS_RELEASE_BUCKET_NAME)/$(BINARY_BASENAME)/latest.txt

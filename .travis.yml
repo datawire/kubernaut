@@ -10,6 +10,10 @@ matrix:
       language: generic
       env: PYTHON=3.6.5
 
+cache:
+  directories:
+  - "$HOME/google-cloud-sdk/"
+
 env:
   global:
     - SCOUT_DISABLE=1
@@ -27,17 +31,22 @@ before_install:
   - python --version
 
 install:
+  - curl https://storage.googleapis.com/pub/gsutil.tar.gz
+  - tar xfz gsutil.tar.gz -C $HOME
+  - export PATH=${PATH}:$HOME/gsutil
   - pip install pipenv
   - make init
+  - gsutil --version
 
 script:
   - make binary
 
-#deploy:
-#  provider: script
-#  skip_cleanup: true
-#  script: ci/release.sh
-#  on:
-#    tags: true
-#    branch: master
-#    python: "3.6"
+deploy:
+  - provider: script
+    script: make publish
+    on:
+      branch: master
+  - provider: script
+    script: make publish
+    on:
+      tags: true
