@@ -1,6 +1,6 @@
 # Makefile
 
-.PHONY: init test
+.PHONY: build init test publish
 
 GIT_COMMIT=$(shell git rev-parse --short --verify HEAD)
 
@@ -56,7 +56,7 @@ binary: test
 	--specpath "build/" \
 	--workpath "build/work"
 
-publish: binary
+publish:
 	printf "$(GIT_COMMIT)" > build/latest.txt
 	gsutil cp -r build/out/*   gs://$(GCS_RELEASE_BUCKET_NAME)/$(BINARY_BASENAME)
 	gsutil cp build/latest.txt gs://$(GCS_RELEASE_BUCKET_NAME)/$(BINARY_BASENAME)/latest.txt
