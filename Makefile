@@ -45,7 +45,7 @@ dev:
 init:
 	pipenv install --dev
 
-test: clean init
+test: init
 	pipenv run py.test test
 
 binary: test
