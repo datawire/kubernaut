@@ -8,13 +8,14 @@ from kubernaut.util import strip_margin
     help=strip_margin("""
     | Manage Kubernaut cluster groups
     |
-    | A "cluster group" is an abstraction for grouping available Kubernetes clusters in a way that allows Kubernaut
-    | admins to group common clusters together for easier access. For example, consider a team that wants to maintain
-    | three types of Kubernetes clusters for development and testing: "dev", "kubernetes-v1.9.7" and "openshift".
+    | A "cluster group" is an abstraction to group available Kubernetes clusters so that Kubernaut admins can create 
+    | groups of clusters that implement common functionality. For example, consider a team that wants to maintain
+    | three types of Kubernetes clusters for development and testing: "dev", "kubernetes-v1.9.7" and "OpenShift".
     |
     | Using a cluster group the admin can configure new clusters to register with the appropriate group. Afterwards it
-    | is possible for a user to ask for a cluster from a specific pool, for example, if Ophelia the Kubernetes Dev needs
-    | an OpenShift cluster she could run the below command (which is just an example) and receive an OpenShift cluster:
+    | is possible for a user to ask for a cluster from a specific group, for example, if Ophelia in Development needs
+    | an OpenShift cluster she could run the below command (which is just an example) and Kubernaut would return access
+    | to an OpenShift cluster in her claim.
     |
     |   `kubernaut claims create --group=OpenShift`
     |""")
@@ -37,4 +38,4 @@ def list_claims(obj: KubernautContext):
         for cg in payload.get("groups", []):
             click.echo("{} - {}".format(cg["name"], cg["description"]))
     else:
-        click.echo("Error retrieving claims!")
+        click.echo("Error retrieving cluster groups!")

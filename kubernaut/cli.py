@@ -12,7 +12,6 @@ from typing import Optional
 
 
 @click.group()
-@click.version_option()
 @click.option(
     "--kubernaut-backend",
     help="Set an alternate API backend",

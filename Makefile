@@ -48,6 +48,9 @@ init:
 test: init
 	pipenv run py.test test
 
+smoketest:
+	build/out/$(GIT_COMMIT)/$(BINARY_OS)/$(BINARY_PLATFORM)/kubernaut --version
+
 binary: test
 	pipenv run pyinstaller kubernaut/cli.py \
 	--distpath "build/out/$(GIT_COMMIT)/$(BINARY_OS)/$(BINARY_PLATFORM)" \
