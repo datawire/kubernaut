@@ -3,7 +3,7 @@
 .SHELL: bash
 .PHONY: build init test publish
 
-DATE        = $(shell date --utc +%Y.%m.%d)
+DATE        = $(shell date -u +%Y.%m.%d)
 GIT_COMMIT  = $(shell git rev-parse --short --verify HEAD)
 DATE_COMMIT = $(DATE)-$(COMMIT)
 
