@@ -1,5 +1,6 @@
 import click
 import inspect
+import pkgutil
 import sys
 
 from kubernaut.util import *
@@ -9,14 +10,22 @@ from kubernaut.backend import Backend
 from ruamel.yaml import YAML
 from typing import Optional
 
-from ._version import get_versions
-__version__ = get_versions()['version']
-del get_versions
+# from ._version import get_versions
+# __version__ = get_versions()['version']
+# del get_versions
 
 model_classes = inspect.getmembers(sys.modules["kubernaut.model"], inspect.isclass)
 
 yaml = YAML(typ='safe')
 yaml.register_class(ClaimSpec)
+
+version = "unknown"
+try:
+    version = pkgutil.get_data('kubernaut', 'version.txt').decode("utf-8")
+except FileNotFoundError:
+    pass
+
+__version__ = version
 
 
 class KubernautContext:

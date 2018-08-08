@@ -1,13 +1,14 @@
 # Makefile
 
+.SHELL: bash
 .PHONY: build init test publish
 
-GIT_COMMIT=$(shell git rev-parse --short --verify HEAD)
+DATE       = $(shell date --utc +%Y.%m.%d)
+GIT_COMMIT = $(shell git rev-parse --short --verify HEAD)
 
 BINARY_BASENAME = kubernaut
 BINARY_PLATFORM = amd64
 BINARY_NAME = $(BINARY_BASENAME)-$(BINARY_OS)-$(BINARY_PLATFORM)
-BINARY_NAME_VERSIONED = $(BINARY_BASENAME)-$(GIT_COMMIT)-$(BINARY_OS)-$(BINARY_PLATFORM)
 
 GCS_RELEASE_BUCKET_NAME = releases.datawire.io
 
@@ -51,15 +52,29 @@ test: init
 smoketest:
 	build/out/$(GIT_COMMIT)/$(BINARY_OS)/$(BINARY_PLATFORM)/kubernaut --version
 
-binary: test
+binary:
+	printf "$(DATE)-$(GIT_COMMIT)" > version.txt
 	pipenv run pyinstaller kubernaut/cli.py \
-	--distpath "build/out/$(GIT_COMMIT)/$(BINARY_OS)/$(BINARY_PLATFORM)" \
+	--distpath "build/out/$(DATE)-$(GIT_COMMIT)/$(BINARY_OS)/$(BINARY_PLATFORM)" \
+	--add-data ../version.txt:kubernaut/ \
 	--name $(BINARY_BASENAME) \
 	--onefile \
 	--specpath "build/" \
 	--workpath "build/work"
 
 publish:
-	printf "$(GIT_COMMIT)" > build/latest.txt
-	gsutil cp -r build/out/*   gs://$(GCS_RELEASE_BUCKET_NAME)/$(BINARY_BASENAME)
-	gsutil cp build/latest.txt gs://$(GCS_RELEASE_BUCKET_NAME)/$(BINARY_BASENAME)/latest.txt
+	gsutil cp -n -r build/out/* gs://$(GCS_RELEASE_BUCKET_NAME)/$(BINARY_BASENAME)
+	gsutil cp version.txt gs://$(GCS_RELEASE_BUCKET_NAME)/$(BINARY_BASENAME)/latest.txt
+
+release:
+	@ if ! gsutil -q stat gs://$(GCS_RELEASE_BUCKET_NAME)/$(BINARY_BASENAME)/$(VERSION)/; then \
+		echo "VERSION: '$(VERSION)' not found! Was it previously published?"; \
+		exit 1; \
+	fi
+
+	gsutil cp \
+		gs://$(GCS_RELEASE_BUCKET_NAME)/$(BINARY_BASENAME)/$(VERSION)/* \
+		gs://$(GCS_RELEASE_BUCKET_NAME)/$(BINARY_BASENAME)/$(shell printf "$(VERSION)" | cut -d '-' -f 1)/
+
+	printf "$(shell printf "$(VERSION)" | cut -d '-' -f 1)" > stable.txt
+	gsutil cp stable.txt gs://$(GCS_RELEASE_BUCKET_NAME)/$(BINARY_BASENAME)/stable.txt
