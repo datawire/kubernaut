@@ -3,8 +3,9 @@
 .SHELL: bash
 .PHONY: build init test publish
 
-DATE       = $(shell date --utc +%Y.%m.%d)
-GIT_COMMIT = $(shell git rev-parse --short --verify HEAD)
+DATE        = $(shell date --utc +%Y.%m.%d)
+GIT_COMMIT  = $(shell git rev-parse --short --verify HEAD)
+DATE_COMMIT = $(DATE)-$(COMMIT)
 
 BINARY_BASENAME = kubernaut
 BINARY_PLATFORM = amd64
@@ -50,7 +51,7 @@ test: init
 	pipenv run py.test test
 
 smoketest:
-	build/out/$(GIT_COMMIT)/$(BINARY_OS)/$(BINARY_PLATFORM)/kubernaut --version
+	build/out/$(shell cat version.txt)/$(BINARY_OS)/$(BINARY_PLATFORM)/kubernaut --version
 
 binary:
 	printf "$(DATE)-$(GIT_COMMIT)" > version.txt
@@ -67,12 +68,12 @@ publish:
 	gsutil cp version.txt gs://$(GCS_RELEASE_BUCKET_NAME)/$(BINARY_BASENAME)/latest.txt
 
 release:
-	@ if ! gsutil -q stat gs://$(GCS_RELEASE_BUCKET_NAME)/$(BINARY_BASENAME)/$(VERSION)/; then \
+	@ if ! gsutil -q stat gs://$(GCS_RELEASE_BUCKET_NAME)/$(BINARY_BASENAME)/$(VERSION)/linux/amd64/kubernaut; then \
 		echo "VERSION: '$(VERSION)' not found! Was it previously published?"; \
 		exit 1; \
 	fi
 
-	gsutil cp \
+	gsutil cp  -R \
 		gs://$(GCS_RELEASE_BUCKET_NAME)/$(BINARY_BASENAME)/$(VERSION)/* \
 		gs://$(GCS_RELEASE_BUCKET_NAME)/$(BINARY_BASENAME)/$(shell printf "$(VERSION)" | cut -d '-' -f 1)/
 
