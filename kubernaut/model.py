@@ -15,7 +15,7 @@ class ClaimSpec:
     def to_json(self):
         data = {"name": self.name}
         if self.cluster_group:
-            data["clusterGroup"] = self.cluster_group
+            data["group"] = self.cluster_group
 
         return json.dumps(data, indent=4)
 

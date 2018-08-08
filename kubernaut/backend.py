@@ -69,7 +69,7 @@ class Backend:
 
         resp = requests.post(url=self.__fmt_url("/claims"),
                              headers=headers,
-                             json=json_payload)
+                             data=json_payload)
 
         return RawBackendResponse(resp.status_code, dict(resp.headers), resp.text)
 

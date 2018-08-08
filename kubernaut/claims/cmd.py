@@ -24,15 +24,15 @@ def claims():
     |
     | Use a spec file:
     |
-    |     kubernaut create claim -f spec.yaml
+    |     kubernaut claims create -f spec.yaml
     |
     | Use a spec file but override some properties:
     |
-    |     kubernaut create claim -f spec.yaml --name=IAmTheWalrus
+    |     kubernaut claims create -f spec.yaml --name=IAmTheWalrus
     |
     | Use CLI arguments only:
     |
-    |     kubernaut create claim --name=prickly-pear-abc123 --cluster-group=main
+    |     kubernaut claims create --name=prickly-pear-abc123 --cluster-group=main
     |""")
 )
 @click.option(
@@ -138,4 +138,5 @@ def _create_claim(backend: Backend, spec: ClaimSpec) -> Optional[Claim]:
     if api_result.is_success():
         return Claim(api_result.json["name"], api_result.json["kubeconfig"])
     else:
+        print(api_result)
         return None
