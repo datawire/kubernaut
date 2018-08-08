@@ -12,8 +12,6 @@ setup(
         [console_scripts]
         kubernaut=kubernaut.cli:cli
     """,
-    version=versioneer.get_version(),
-    cmdclass=versioneer.get_cmdclass(),
     author="datawire.io",
     author_email="dev@datawire.io",
     url="https://github.com/datawire/kubernaut",
