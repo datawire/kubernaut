@@ -90,9 +90,6 @@ class Backend:
     def get_many_claims(self):
         headers = self.__init_headers()
         headers["content-type"] = "application/json"
-
-        print(self.__fmt_url("/claims"))
-
         resp = requests.get(url=self.__fmt_url("/claims"),
                             headers=headers)
 

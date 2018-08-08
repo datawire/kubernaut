@@ -1,4 +1,5 @@
 import click
+import operator
 import re
 
 from kubernaut import KubernautContext
@@ -81,11 +82,15 @@ def create_claim(obj, filename, name: Optional[str], cluster_group: Optional[str
 def list_claims(obj: KubernautContext):
     backend = obj.get_backend()
     api_res = backend.get_many_claims()
-    print(api_res)
 
     if api_res.is_success():
-        payload = api_res.json
-        for claim in payload.get("claims", []):
+        claims_list = api_res.json.get("claims", [])
+        claims_list.sort(key=operator.itemgetter('name'))
+
+        if len(claims_list) == 0:
+            click.echo("No active claims found")
+
+        for claim in claims_list:
             click.echo(claim["name"])
     else:
         click.echo("Error retrieving claims!")
@@ -134,9 +139,8 @@ def create_final_spec(spec: Optional[ClaimSpec], overrides: Dict[str, Any]) -> C
 
 def _create_claim(backend: Backend, spec: ClaimSpec) -> Optional[Claim]:
     api_result = backend.create_claim(spec.to_json())
-
     if api_result.is_success():
-        return Claim(api_result.json["name"], api_result.json["kubeconfig"])
+        return Claim(api_result.json["claim"]["name"], api_result.json["claim"]["kubeconfig"])
     else:
         print(api_result)
         return None
