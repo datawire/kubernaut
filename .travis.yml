@@ -56,4 +56,4 @@ deploy:
     script: make publish
     skip_cleanup: true
     on:
-      branch: master2
+      branch: master
