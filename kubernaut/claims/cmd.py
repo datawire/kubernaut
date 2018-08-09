@@ -8,7 +8,7 @@ from kubernaut.util import *
 from kubernaut.model import *
 from kubernaut.backend import Backend
 from pathlib import Path
-from typing import Tuple
+from typing import List
 
 
 @click.group(
@@ -108,7 +108,7 @@ def list_claims(obj: KubernautContext):
     is_flag=True
 )
 @click.pass_obj
-def delete_claim(obj, names: Tuple[str], all_claims: bool):
+def delete_claim(obj, names: List[str], all_claims: bool):
     backend = obj.config.current_backend
 
     results = {}
@@ -119,6 +119,22 @@ def delete_claim(obj, names: Tuple[str], all_claims: bool):
         for name in set(names):
             result = backend.delete_claim(name)
             results[name] = result
+
+
+@claims.command(
+    "describe",
+    help="Delete one or more claims"
+)
+@click.argument("name", nargs=1)
+@click.pass_obj
+def describe_claim(obj, name: str) -> None:
+    backend = obj.config.current_backend
+    api_res = backend.get_claim(name)
+
+    if api_res.is_success():
+        print(api_res.json["claim"]["name"])
+    else:
+        print("No active claim found: {}".format(name))
 
 
 def create_final_spec(spec: Optional[ClaimSpec], overrides: Dict[str, Any]) -> ClaimSpec:
