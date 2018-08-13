@@ -58,6 +58,7 @@ binary:
 	pipenv run pyinstaller kubernaut/cli.py \
 	--distpath "build/out/$(DATE)-$(GIT_COMMIT)/$(BINARY_OS)/$(BINARY_PLATFORM)" \
 	--add-data ../version.txt:kubernaut/ \
+	--add-data ../kubernaut/resources/names.json:kubernaut/resources \
 	--name $(BINARY_BASENAME) \
 	--onefile \
 	--specpath "build/" \
