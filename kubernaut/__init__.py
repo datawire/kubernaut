@@ -43,6 +43,11 @@ class KubernautContext:
             |
             | Use `kubernaut config backend --help` to learn how to manage backends.
             |
+            | Note, if you are migrating from kubernaut v1, do this:
+            |
+            | 1. Grab your legacy JWT from `~/.config/kubernaut/config.json`
+            | 2. `kubernaut config backend create --url="https://next.kubernaut.io" --name="v2" --activate <token>`
+            |
             """)
 
             raise click.ClickException(msg)

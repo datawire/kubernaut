@@ -109,7 +109,7 @@ def list_claims(obj: KubernautContext):
 )
 @click.pass_obj
 def delete_claim(obj, names: List[str], all_claims: bool):
-    backend = obj.config.current_backend
+    backend = obj.get_backend()
 
     results = {}
 
@@ -123,7 +123,7 @@ def delete_claim(obj, names: List[str], all_claims: bool):
 
 @claims.command(
     "describe",
-    help="Delete one or more claims"
+    help="Describe one or more claims"
 )
 @click.argument("name", nargs=1)
 @click.pass_obj
