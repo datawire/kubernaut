@@ -41,7 +41,7 @@ clean:
 	find -iname "*.pyc" -delete
 	pipenv clean
 
-dev:
+dev: init
 	pipenv install -e .
 
 init:
