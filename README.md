@@ -22,6 +22,16 @@ Latest release: `curl http://releases.datawire.io/kubernaut/latest.txt`
 
 # Quick Start
 
+## Get Token
+
+**NOTE**: This is temporary until we have a better account mgmt and login UX.
+
+1. Goto https://kubernaut.io/token and login.
+2. Copy the token to your clipboard.
+3. Run the below command:
+
+`kubernaut config backend create --url="https://next.kubernaut.io" --name="v2" --activate $TOKEN`
+
 ## Create a cluster claim
 
 `kubernaut claims create --name mycluster`
