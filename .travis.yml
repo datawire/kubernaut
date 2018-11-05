@@ -7,7 +7,7 @@ matrix:
         - 3.6
       sudo: false
     - os: osx
-      osx_image: xcode6.4
+      osx_image: xcode8.3
       language: generic
       env: PYTHON=3.6.5
 
