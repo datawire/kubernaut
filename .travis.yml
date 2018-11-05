@@ -29,7 +29,8 @@ before_install:
       -d
   - |
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-      pip install virtualenv
+      brew install python3
+      pip3 install virtualenv
       virtualenv venv -p python3;
       source venv/bin/activate
     fi
