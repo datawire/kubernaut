@@ -11,6 +11,7 @@ kubernaut = {editable = true, path = "."}
 "ruamel.yaml" = "*"
 colorama = "*"
 versioneer = "*"
+pyinstaller = "==3.4"
 
 [dev-packages]
 mypy = "*"
