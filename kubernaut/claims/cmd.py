@@ -51,15 +51,24 @@ def claims():
     help="Set the cluster-group to claim from",
     type=str,
 )
+@click.option(
+    "--length",
+    help="Set the length of the claim in minutes",
+    type=int,
+    default=1440
+)
 @click.pass_obj
-def create_claim(obj, filename, name: Optional[str], cluster_group: Optional[str]):
+def create_claim(obj, filename, name: Optional[str], cluster_group: Optional[str], length: int):
     backend = obj.config.current_backend
+
+    if length < 1:
+        length = 1440
 
     spec = None
     if filename:
         spec = ClaimSpec.from_yaml(Path(filename).read_text(encoding="utf-8"))
 
-    spec = create_final_spec(spec, {"name": name, "cluster_group": cluster_group})
+    spec = create_final_spec(spec, {"name": name, "cluster_group": cluster_group, "length": length})
 
     pattern = '^[a-z][a-z0-9-_]*[a-z0-9]$'
     if not re.search(pattern, spec.name, re.IGNORECASE | re.ASCII):
@@ -138,7 +147,7 @@ def describe_claim(obj, name: str) -> None:
 
 
 def create_final_spec(spec: Optional[ClaimSpec], overrides: Dict[str, Any]) -> ClaimSpec:
-    spec = spec if spec else ClaimSpec("", "")
+    spec = spec if spec else ClaimSpec("", "", 0)
 
     if overrides.get("name", None):
         spec.name = overrides["name"]
@@ -149,6 +158,11 @@ def create_final_spec(spec: Optional[ClaimSpec], overrides: Dict[str, Any]) -> C
         spec.cluster_group = overrides["cluster_group"]
     elif not spec.cluster_group:
         spec.cluster_group = "default"
+
+    if overrides.get("length", None):
+        spec.length = overrides["length"]
+    elif not spec.length:
+        spec.length = 1440
 
     return spec
 

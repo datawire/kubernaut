@@ -20,6 +20,8 @@ class RawBackendResponse:
         self.headers = headers or {}
         self.content = content
 
+        self.headers = {k.lower(): v for k, v in self.headers.items()}
+
         if "application/json" in headers.get("content-type", ""):
             self.json = json.loads(self.content, encoding="utf-8")
 

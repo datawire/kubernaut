@@ -5,15 +5,16 @@ from typing import Optional
 
 class ClaimSpec:
 
-    def __init__(self, name: str, cluster_group: str) -> None:
+    def __init__(self, name: str, cluster_group: str, length: int) -> None:
         self.name = name
         self.cluster_group = cluster_group
+        self.length = length
 
     def validate(self):
         pass
 
     def to_json(self):
-        data = {"name": self.name}
+        data = {"name": self.name, "length": self.length}
         if self.cluster_group:
             data["group"] = self.cluster_group
 
@@ -22,7 +23,7 @@ class ClaimSpec:
     @classmethod
     def from_json(cls, json_string: str) -> 'ClaimSpec':
         data = json.loads(json_string)
-        return ClaimSpec(data["name"], data["clusterGroup"])
+        return ClaimSpec(data["name"], data["clusterGroup"], data["length"])
 
     @classmethod
     def from_yaml(cls, yaml_string: str) -> 'ClaimSpec':
@@ -31,7 +32,8 @@ class ClaimSpec:
 
         return ClaimSpec(
             name=data.get("name", None),
-            cluster_group=data.get("clusterGroup", None)
+            cluster_group=data.get("clusterGroup", None),
+            length=data.get("length", None)
         )
 
 
