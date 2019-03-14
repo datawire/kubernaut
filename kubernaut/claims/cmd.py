@@ -1,6 +1,6 @@
 import click
 import operator
-import re
+import sys
 
 from kubernaut import KubernautContext
 from kubernaut.kubeconfig import *
@@ -129,6 +129,22 @@ def delete_claim(obj, names: List[str], all_claims: bool):
             result = backend.delete_claim(name)
             results[name] = result
 
+
+@claims.command(
+    "get-kubeconfig",
+    help="Describe one or more claims"
+)
+@click.argument("name", nargs=1)
+@click.pass_obj
+def get_kubeconfig(obj, name: str) -> None:
+    backend = obj.config.current_backend
+    api_res = backend.get_claim(name)
+
+    if api_res.is_success():
+        print(api_res.json["claim"]["kubeconfig"])
+    else:
+        print("No active claim found: {}".format(name))
+        sys.exit(1)
 
 @claims.command(
     "describe",
