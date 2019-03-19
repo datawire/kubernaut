@@ -34,7 +34,7 @@ Latest release: `curl http://releases.datawire.io/kubernaut/latest.txt`
 
 ## Create a cluster claim
 
-`kubernaut claims create --name mycluster`
+`kubernaut claims create --name mycluster --cluster-group=main`
 
 ## View active Claims
 
